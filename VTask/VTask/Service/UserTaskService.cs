@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -10,30 +11,18 @@ namespace VTask.Service
 {
     public class UserTaskService : IUserTaskService
     {
+        private readonly MainDatabaseContext _dbContext;
         private readonly IMapper _mapper;
-        private List<UserTask> _tasks;
 
-        public UserTaskService(IMapper mapper) 
+        public UserTaskService(MainDatabaseContext dbContext, IMapper mapper) 
         {
+            _dbContext = dbContext;
             _mapper = mapper;
-
-            this._tasks = new List<UserTask>()
-            {
-                new() { Id = 0, Title = "Title 0", Description = "Description 0", State = TaskState.New },
-                new() { Id = 1, Title = "Title 1", Description = "Description 1", State = TaskState.New },
-                new() { Id = 2, Title = "Title 2", Description = "Description 2", State = TaskState.Active },
-                new() { Id = 3, Title = "Title 3", Description = "Description 3", State = TaskState.Active },
-                new() { Id = 4, Title = "Title 4", Description = "Description 4", State = TaskState.Active },
-                new() { Id = 5, Title = "Title 5", Description = "Description 5", State = TaskState.Active },
-                new() { Id = 6, Title = "Title 6", Description = "Description 6", State = TaskState.Closed },
-                new() { Id = 7, Title = "Title 7", Description = "Description 7", State = TaskState.Closed },
-                new() { Id = 8, Title = "Title 8", Description = "Description 8", State = TaskState.Closed }
-            };
         }
 
         public async Task<ServiceResponse<GetUserTaskResponseDto>> Get(int id)
         {
-            var task = _tasks.FirstOrDefault(t => t.Id == id);
+            var task = await _dbContext.Tasks.FindAsync(id);
 
             ServiceResponse<GetUserTaskResponseDto> response = new()
             {
@@ -46,7 +35,7 @@ namespace VTask.Service
 
         public async Task<ServiceResponse<IEnumerable<GetUserTaskResponseDto>>> GetAll()
         {
-            IEnumerable<UserTask> tasks = _tasks;
+            var tasks = await _dbContext.Tasks.ToArrayAsync();
 
             ServiceResponse<IEnumerable<GetUserTaskResponseDto>> response = new()
             {
@@ -60,8 +49,9 @@ namespace VTask.Service
         public async Task<ServiceResponse<AddUserTaskResponseDto>> Add(AddUserTaskRequestDto addTaskDto)
         {
             var task = _mapper.Map<UserTask>(addTaskDto);
-            task.Id = _tasks.Max(t => t.Id) + 1;
-            _tasks.Add(task);
+            _dbContext.Tasks.Add(task);
+
+            await _dbContext.SaveChangesAsync();
 
             ServiceResponse<AddUserTaskResponseDto> response = new()
             {
@@ -74,11 +64,13 @@ namespace VTask.Service
 
         public async Task<ServiceResponse<UpdateUserTaskResponseDto>> Update(UpdateUserTaskRequestDto updateTaskDto)
         {
-            var task = _tasks.Find(t => t.Id == updateTaskDto.Id);
+            var task = await _dbContext.Tasks.FindAsync(updateTaskDto.Id);
             if (task != null)
             {
                 task.Title = updateTaskDto.Title;
                 task.Description = updateTaskDto.Description;
+
+                await _dbContext.SaveChangesAsync();
             }
 
             ServiceResponse<UpdateUserTaskResponseDto> response = new()
@@ -92,8 +84,13 @@ namespace VTask.Service
 
         public async Task<ServiceResponse<DeleteUserTaskResponseDto>> Delete(int id)
         {
-            var task = _tasks.Find(t => t.Id == id);
-            _tasks.Remove(task);
+            var task = await _dbContext.Tasks.FindAsync(id);
+            if (task != null)
+            {
+                _dbContext.Tasks.Remove(task);
+
+                await _dbContext.SaveChangesAsync();
+            }
 
             ServiceResponse<DeleteUserTaskResponseDto> response = new()
             {
