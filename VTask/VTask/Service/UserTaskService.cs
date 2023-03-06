@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using VTask.Model;
@@ -13,15 +15,18 @@ namespace VTask.Service
     {
         private readonly MainDatabaseContext _dbContext;
         private readonly IMapper _mapper;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public UserTaskService(MainDatabaseContext dbContext, IMapper mapper) 
+        public UserTaskService(MainDatabaseContext dbContext, IMapper mapper, IHttpContextAccessor httpContextAccessor) 
         {
             _dbContext = dbContext;
             _mapper = mapper;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<ServiceResponse<GetUserTaskResponseDto>> Get(int id)
         {
+            int userId = GetUserId();
             var task = await _dbContext.Tasks.FindAsync(id);
 
             ServiceResponse<GetUserTaskResponseDto> response = new()
@@ -35,7 +40,8 @@ namespace VTask.Service
 
         public async Task<ServiceResponse<IEnumerable<GetUserTaskResponseDto>>> GetAll()
         {
-            var tasks = await _dbContext.Tasks.ToArrayAsync();
+            int userId = GetUserId();
+            var tasks = (await _dbContext.Users.Include(u => u.Tasks).FirstOrDefaultAsync(u => u.Id == userId))!.Tasks;
 
             ServiceResponse<IEnumerable<GetUserTaskResponseDto>> response = new()
             {
@@ -50,6 +56,10 @@ namespace VTask.Service
         {
             var task = _mapper.Map<UserTask>(addTaskDto);
             _dbContext.Tasks.Add(task);
+
+            int userId = GetUserId();
+            var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == userId)!;
+            task.User = user;
 
             await _dbContext.SaveChangesAsync();
 
@@ -100,5 +110,8 @@ namespace VTask.Service
 
             return response;
         }
+
+
+        private int GetUserId() => int.Parse(_httpContextAccessor.HttpContext!.User.FindFirstValue(ClaimTypes.NameIdentifier)!);
     }
 }
