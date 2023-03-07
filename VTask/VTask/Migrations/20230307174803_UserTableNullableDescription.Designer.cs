@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VTask.Data;
 
@@ -10,9 +11,11 @@ using VTask.Data;
 namespace VTask.Migrations
 {
     [DbContext(typeof(DefaultDbContext))]
-    partial class MainDatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20230307174803_UserTableNullableDescription")]
+    partial class UserTableNullableDescription
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

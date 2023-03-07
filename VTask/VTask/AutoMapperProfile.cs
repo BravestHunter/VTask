@@ -14,6 +14,11 @@ namespace VTask
             CreateMap<UpdateUserTaskRequestDto, UserTask>();
             CreateMap<UserTask, UpdateUserTaskResponseDto>();
             CreateMap<UserTask, DeleteUserTaskResponseDto>();
+
+            CreateMap<CreateUserTaskRequestDto, UserTask>();
+            CreateMap<UserTask, UpdateUserTaskRequestDto>();
+            CreateMap<UpdateUserTaskRequestDto, UserTask>();
+            CreateMap<UserTask, DeleteUserTaskRequestDto>();
         }
     }
 }

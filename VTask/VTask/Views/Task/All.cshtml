@@ -1,0 +1,53 @@
+﻿@model IEnumerable<UserTask>
+@{
+    ViewData["Title"] = "Last tasks";
+}
+
+<h1>Last 10 tasks</h1>
+
+<a asp-controller="Task" asp-action="Create" class="btn btn-secondary">Create</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Id
+            </th>
+            <th>
+                Title
+            </th>
+            <th>
+                Description
+            </th>
+            <th>
+                Status
+            </th>
+            <th>
+                -
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (UserTask task in Model)
+        {
+            <tr>
+                <td>
+                    @task.Id
+                </td>
+                <td>
+                    @task.Title
+                </td>
+                <td>
+                    @task.Description
+                </td>
+                <td>
+                    @task.State
+                </td>
+                <td>
+                    <a asp-controller="Task" asp-action="Update" asp-route-id="@task.Id">Update</a>
+                    <a asp-controller="Task" asp-action="Delete" asp-route-id="@task.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

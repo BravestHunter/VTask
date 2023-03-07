@@ -1,0 +1,32 @@
+﻿@model CreateUserTaskRequestDto
+@{
+    ViewData["Title"] = "Create Task";
+}
+
+<form method="post">
+    <div class="container">
+        <div class="row">
+            <h2 class="text-primary">Create task</h2>
+        </div>
+        <div>
+            <label asp-for="Title"></label>
+            <input asp-for="Title" class="form-control" />
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+        <div>
+            <label asp-for="Description"></label>
+            <input asp-for="Description" class="form-control" />
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <button type="submit" class="btn-primary">Create</button>
+        <a asp-controller="Task" asp-action="All" class="btn btn-secondary">Back to list</a>
+    </div>
+</form>
+
+@section Scripts
+{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}
