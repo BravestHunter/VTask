@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using VTask.Model;
 using VTask.Model.DTO;
 
-namespace VTask.Service
+namespace VTask.Services
 {
     public interface IUserTaskService
     {

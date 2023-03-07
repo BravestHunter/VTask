@@ -6,18 +6,19 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
+using VTask.Data;
 using VTask.Model;
 using VTask.Model.DTO;
 
-namespace VTask.Service
+namespace VTask.Services
 {
     public class UserTaskService : IUserTaskService
     {
-        private readonly MainDatabaseContext _dbContext;
+        private readonly DefaultDbContext _dbContext;
         private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public UserTaskService(MainDatabaseContext dbContext, IMapper mapper, IHttpContextAccessor httpContextAccessor) 
+        public UserTaskService(DefaultDbContext dbContext, IMapper mapper, IHttpContextAccessor httpContextAccessor) 
         {
             _dbContext = dbContext;
             _mapper = mapper;

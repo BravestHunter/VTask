@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 using VTask.Model;
-using VTask.Service;
+using VTask.Services;
 
-namespace VTask
+namespace VTask.Repositories
 {
     public interface IAuthRepository
     {

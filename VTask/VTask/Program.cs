@@ -7,15 +7,15 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
-using System.Text;
-using VTask;
-using VTask.Service;
+using VTask.Data;
+using VTask.Repositories;
+using VTask.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddDbContext<MainDatabaseContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("MainDbConnection")));
 builder.Services.AddControllers();
+builder.Services.AddDbContext<DefaultDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c => 

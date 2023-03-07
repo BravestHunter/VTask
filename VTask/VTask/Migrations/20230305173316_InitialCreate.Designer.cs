@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using VTask;
+using VTask.Data;
 
 #nullable disable
 
 namespace VTask.Migrations
 {
-    [DbContext(typeof(MainDatabaseContext))]
+    [DbContext(typeof(DefaultDbContext))]
     [Migration("20230305173316_InitialCreate")]
     partial class InitialCreate
     {

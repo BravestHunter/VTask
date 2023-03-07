@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using VTask.Model.DTO;
-using VTask.Service;
+using VTask.Repositories;
+using VTask.Services;
 
-namespace VTask.Controller
+namespace VTask.Controllers
 {
     [ApiController]
     [Route("[controller]")]

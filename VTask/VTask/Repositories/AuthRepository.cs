@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.TagHelpers;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -12,18 +10,19 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Unicode;
 using System.Threading.Tasks;
+using VTask.Data;
 using VTask.Model;
 using VTask.Model.DTO;
-using VTask.Service;
+using VTask.Services;
 
-namespace VTask
+namespace VTask.Repositories
 {
     public class AuthRepository : IAuthRepository
     {
-        private readonly MainDatabaseContext _dbContext;
+        private readonly DefaultDbContext _dbContext;
         private readonly IConfiguration _configuration;
 
-        public AuthRepository(MainDatabaseContext dbContext, IConfiguration configuration)
+        public AuthRepository(DefaultDbContext dbContext, IConfiguration configuration)
         {
             _dbContext = dbContext;
             _configuration = configuration;
@@ -89,7 +88,7 @@ namespace VTask
                 throw new KeyNotFoundException("Auth key wasn't found in app settings");
             }
 
-            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(strKey));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(strKey));
 
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 

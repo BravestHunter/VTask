@@ -1,6 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-
-namespace VTask.Service
+﻿namespace VTask.Services
 {
     public class ServiceResponse<T>
     {

@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using VTask;
+using VTask.Data;
 
 #nullable disable
 
 namespace VTask.Migrations
 {
-    [DbContext(typeof(MainDatabaseContext))]
+    [DbContext(typeof(DefaultDbContext))]
     partial class MainDatabaseContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

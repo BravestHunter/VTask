@@ -6,9 +6,9 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using VTask.Model;
 using VTask.Model.DTO;
-using VTask.Service;
+using VTask.Services;
 
-namespace VTask.Controller
+namespace VTask.Controllers
 {
     [Authorize]
     [ApiController]
