@@ -11,6 +11,7 @@ using VTask.Services;
 
 namespace VTask.Controllers.MVC
 {
+    [Authorize]
     public class TaskController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;

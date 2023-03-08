@@ -12,7 +12,7 @@ using VTask.Data;
 namespace VTask.Migrations
 {
     [DbContext(typeof(DefaultDbContext))]
-    [Migration("20230308144929_InitialCreate")]
+    [Migration("20230308183359_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />

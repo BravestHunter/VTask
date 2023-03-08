@@ -1,12 +1,12 @@
-﻿@model LoginRequestDto
+﻿@model RegisterUserRequestDto
 @{
-    ViewData["Title"] = "Login";
+    ViewData["Title"] = "Register";
 }
 
 <form method="post">
     <div class="container">
         <div class="row">
-            <h2 class="text-primary">Login</h2>
+            <h2 class="text-primary">Register</h2>
         </div>
         <div>
             <label asp-for="Name"></label>
@@ -19,12 +19,12 @@
             <span asp-validation-for="Password" class="text-danger"></span>
         </div>
         <div asp-validation-summary="All" class="text-danger"></div>
-        <button type="submit" class="btn-primary">Login</button>
+        <button type="submit" class="btn-primary">Register</button>
     </div>
 </form>
 
 @section Scripts
-{
+    {
     @{
         <partial name="_ValidationScriptsPartial" />
     }
