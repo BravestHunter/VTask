@@ -13,23 +13,24 @@ namespace VTask.Controllers.MVC
 {
     public class TaskController : Controller
     {
-        private readonly IUserTaskRepository _userTaskRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public TaskController(IUserTaskRepository userTaskRepository, IMapper mapper)
+        public TaskController(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _userTaskRepository = userTaskRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             return View();
         }
 
+        [HttpGet]
         public async Task<IActionResult> All()
         {
-            IEnumerable<UserTask> tasks = await _userTaskRepository.GetLast(10);
+            IEnumerable<UserTask> tasks = await _unitOfWork.UserTaskRepository.GetAll();
 
             return View(tasks);
         }
@@ -50,7 +51,9 @@ namespace VTask.Controllers.MVC
             }
 
             var task = _mapper.Map<UserTask>(requestDto);
-            await _userTaskRepository.Add(task);
+            _unitOfWork.UserTaskRepository.Add(task);
+
+            await _unitOfWork.SaveChanges();
 
             TempData["SuccessMessage"] = "Task was created successfully";
 
@@ -60,12 +63,12 @@ namespace VTask.Controllers.MVC
         [HttpGet]
         public async Task<IActionResult> Update(int? id)
         {
-            if (id == null || id == 0) 
+            if (id == null || id == 0)
             {
                 return NotFound();
             }
 
-            var task = await _userTaskRepository.Get(id.Value);
+            var task = await _unitOfWork.UserTaskRepository.Get(id.Value);
             if (task == null)
             {
                 return NotFound();
@@ -86,7 +89,9 @@ namespace VTask.Controllers.MVC
             }
 
             var task = _mapper.Map<UserTask>(requestDto);
-            await _userTaskRepository.Update(task);
+            _unitOfWork.UserTaskRepository.Update(task);
+
+            await _unitOfWork.SaveChanges();
 
             TempData["SuccessMessage"] = "Task was updated successfully";
 
@@ -101,7 +106,7 @@ namespace VTask.Controllers.MVC
                 return NotFound();
             }
 
-            var task = await _userTaskRepository.Get(id.Value);
+            var task = await _unitOfWork.UserTaskRepository.Get(id.Value);
             if (task == null)
             {
                 return NotFound();
@@ -121,13 +126,15 @@ namespace VTask.Controllers.MVC
                 return View(requestDto);
             }
 
-            var task = await _userTaskRepository.Get(requestDto.Id);
+            var task = await _unitOfWork.UserTaskRepository.Get(requestDto.Id);
             if (task == null)
             {
                 return NotFound();
             }
 
-            await _userTaskRepository.Delete(task);
+            _unitOfWork.UserTaskRepository.Remove(task);
+
+            await _unitOfWork.SaveChanges();
 
             TempData["SuccessMessage"] = "Task was deleted successfully";
 

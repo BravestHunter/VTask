@@ -32,9 +32,6 @@ builder.Services.AddSwaggerGen(c =>
     c.OperationFilter<SecurityRequirementsOperationFilter>();
 });
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
-builder.Services.AddScoped<IAuthRepository, AuthRepository>();
-builder.Services.AddScoped<IUserTaskRepository, UserTaskRepository>();
-builder.Services.AddScoped<IUserTaskService, UserTaskService>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options => 
     {
@@ -48,6 +45,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     })
     .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme);
 builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+builder.Services.AddScoped<IUserTaskRepositoryAlter, UserTaskRepositoryAlter>();
+builder.Services.AddScoped<IUserTaskService, UserTaskService>();
 
 var app = builder.Build();
 
@@ -67,6 +69,7 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.MapControllerRoute("MVC_Area", "mvc/{area?}/{controller=Home}/{action=Index}/{id?}");
 app.MapControllerRoute("MVC", "mvc/{controller=Home}/{action=Index}/{id?}");
 app.MapControllers();
 

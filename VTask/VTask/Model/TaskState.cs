@@ -5,8 +5,9 @@ namespace VTask.Model
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum TaskState
     {
-        New,
+        Inactive,
         Active,
-        Closed
+        Finished,
+        Archived
     }
 }

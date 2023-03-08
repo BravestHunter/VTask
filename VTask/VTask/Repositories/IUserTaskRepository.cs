@@ -1,16 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using VTask.Model;
-using VTask.Model.DTO;
+﻿using VTask.Model;
 
 namespace VTask.Repositories
 {
-    public interface IUserTaskRepository
+    public interface IUserTaskRepository : IRepository<UserTask>
     {
-        Task<UserTask> Get(int id);
-        Task<IEnumerable<UserTask>> GetLast(int count);
-        Task<UserTask> Add(UserTask task);
-        Task<UserTask> Update(UserTask task);
-        Task Delete(UserTask task);
     }
 }
