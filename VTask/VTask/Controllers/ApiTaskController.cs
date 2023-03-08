@@ -13,11 +13,11 @@ namespace VTask.Controllers
     [Authorize]
     [ApiController]
     [Route("api/[controller]")]
-    public class TaskController : ControllerBase
+    public class ApiTaskController : ControllerBase
     {
         private readonly IUserTaskService _userTaskService;
 
-        public TaskController(IUserTaskService userTaskService)
+        public ApiTaskController(IUserTaskService userTaskService)
         {
             _userTaskService = userTaskService;
         }

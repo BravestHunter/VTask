@@ -8,11 +8,11 @@ namespace VTask.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class AuthController : ControllerBase
+    public class ApiAuthController : ControllerBase
     {
         private readonly IAuthRepository _authRepository;
 
-        public AuthController(IAuthRepository authRepository)
+        public ApiAuthController(IAuthRepository authRepository)
         {
             _authRepository = authRepository;
         }

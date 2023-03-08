@@ -79,8 +79,8 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllerRoute("MVC_Area", "mvc/{area?}/{controller=Home}/{action=Index}/{id?}");
 app.MapControllerRoute("MVC", "mvc/{controller=Home}/{action=Index}/{id?}");
+app.MapControllerRoute("MVC_Area", "mvc/{area?}/{controller=Home}/{action=Index}/{id?}");
 app.MapControllers();
 
 app.Run();

@@ -13,21 +13,36 @@
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#">Navbar</a>
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index">VTask</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarColor01">
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
+                        @if (User.Identity?.IsAuthenticated ?? false)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Task" asp-action="Index">Tasks</a>
+                            </li>
+                        }
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Task" asp-action="Index">Tasks</a>
+                            <a class="nav-link" asp-controller="Home" asp-action="About">About</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">About</a>
-                        </li>
+                    </ul>
+
+                    <ul class="navbar-nav">
+                        @if (User.Identity?.IsAuthenticated ?? false)
+                        {
+                            <a class="nav-link" asp-controller="Auth" asp-action="Logout">Logout</a>
+                        }
+                        else
+                        {
+                            <a class="nav-link" asp-controller="Auth" asp-action="Register">Register</a>
+                            <a class="nav-link" asp-controller="Auth" asp-action="Login">Login</a>
+                        }
                     </ul>
                 </div>
             </div>
@@ -42,9 +57,10 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2023 - VTask - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2023 - VTask - <a asp-controller="Home" asp-action="Privacy">Privacy</a> - <a asp-controller="Home" asp-action="Contacts">Contacts</a>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/toastr/toastr.min.js"></script>

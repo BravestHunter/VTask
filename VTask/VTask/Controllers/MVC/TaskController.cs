@@ -23,6 +23,7 @@ namespace VTask.Controllers.MVC
             _mapper = mapper;
         }
 
+        [HttpGet]
         public IActionResult Index()
         {
             return View();

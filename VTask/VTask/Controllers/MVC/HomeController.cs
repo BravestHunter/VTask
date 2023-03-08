@@ -13,5 +13,15 @@ namespace VTask.Controllers.MVC
         {
             return View();
         }
+
+        public IActionResult Contacts()
+        {
+            return View();
+        }
+
+        public IActionResult Privacy()
+        {
+            return View();
+        }
     }
 }
