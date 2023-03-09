@@ -32,13 +32,23 @@ namespace VTask.Controllers.MVC
         [HttpPost]
         public async Task<IActionResult> Register(RegisterUserRequestDto requestDto)
         {
-            var user = _mapper.Map<User>(requestDto);
-            var response = await _authRepository.Register(user, requestDto.Password);
-
-            if (!response.Success)
+            if (!ModelState.IsValid)
             {
                 return View(requestDto);
             }
+
+            var user = _mapper.Map<User>(requestDto);
+            var registerResponse = await _authRepository.Register(user, requestDto.Password);
+
+            if (!registerResponse.Success)
+            {
+                return View(requestDto);
+            }
+
+            var loginResponse = await _authRepository.Login(requestDto.Name, requestDto.Password);
+            // assert loginResponse successful
+
+            HttpContext.Response.Cookies.Append("JWT", loginResponse.Data!);
 
             return RedirectToAction("Index", "Home");
         }
@@ -52,6 +62,11 @@ namespace VTask.Controllers.MVC
         [HttpPost]
         public async Task<IActionResult> Login(LoginRequestDto requestDto)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(requestDto);
+            }
+
             var response = await _authRepository.Login(requestDto.Name, requestDto.Password);
 
             if (!response.Success)

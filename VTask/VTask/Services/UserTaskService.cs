@@ -41,8 +41,10 @@ namespace VTask.Services
 
         public async Task<ServiceResponse<IEnumerable<GetUserTaskResponseDto>>> GetAll()
         {
-            int userId = GetUserId();
-            var tasks = (await _dbContext.Users.Include(u => u.Tasks).FirstOrDefaultAsync(u => u.Id == userId))!.Tasks;
+            //int userId = GetUserId();
+            //var tasks = (await _dbContext.Users.Include(u => u.Tasks).FirstOrDefaultAsync(u => u.Id == userId))!.Tasks;
+
+            var tasks = await _dbContext.Tasks.ToArrayAsync();
 
             ServiceResponse<IEnumerable<GetUserTaskResponseDto>> response = new()
             {
