@@ -14,24 +14,27 @@ namespace VTask.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IAuthService _authService;
-        private readonly IMapper _mapper;
 
-        public ApiAuthController(IUnitOfWork unitOfWork, IAuthService authService, IMapper mapper)
+        public ApiAuthController(IUnitOfWork unitOfWork, IAuthService authService)
         {
             _unitOfWork = unitOfWork;
             _authService = authService;
-            _mapper = mapper;
         }
 
         [HttpPost("Register")]
         public async Task<ActionResult<RegisterResponseDto>> Register(RegisterRequestDto requestDto)
         {
-            var user = _mapper.Map<User>(requestDto);
-            await _authService.Register(user, requestDto.Password);
+            RegisterResponseDto response = new();
+
+            var serviceResponse = await _authService.Register(requestDto.Name, requestDto.Password);
+            if (!serviceResponse.Success)
+            {
+                return BadRequest(response);
+            }
 
             await _unitOfWork.SaveChanges();
 
-            var response = _mapper.Map<RegisterResponseDto>(user);
+            response.Id = serviceResponse.Data;
 
             return Ok(response);
         }
@@ -39,11 +42,11 @@ namespace VTask.Controllers
         [HttpPost("Login")]
         public async Task<ActionResult<ServiceResponse<int>>> Login(LoginRequestDto requestDto)
         {
-            string? token = await _authService.Login(requestDto.Name, requestDto.Password);
+            var serviceResponse = await _authService.Login(requestDto.Name, requestDto.Password);
 
-            LoginResponseDto response = new() { Token = token };
+            LoginResponseDto response = new() { Token = serviceResponse.Data };
 
-            if (string.IsNullOrEmpty(token))
+            if (serviceResponse.Success)
             {
                 return BadRequest(response);
             }

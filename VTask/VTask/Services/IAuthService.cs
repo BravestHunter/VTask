@@ -5,7 +5,7 @@ namespace VTask.Services
 {
     public interface IAuthService
     {
-        Task<string?> Login(string name, string password);
-        Task Register(User user, string password);
+        Task<ServiceResponse<string>> Login(string name, string password);
+        Task<ServiceResponse<int>> Register(string name, string password);
     }
 }

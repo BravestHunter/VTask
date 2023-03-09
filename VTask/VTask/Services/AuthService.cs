@@ -12,6 +12,8 @@ using VTask.Data;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using VTask.Repositories;
+using NuGet.Protocol.Core.Types;
+using Microsoft.AspNetCore.Identity;
 
 namespace VTask.Services
 {
@@ -26,39 +28,59 @@ namespace VTask.Services
             _jwtTokenService = jwtTokenService;
         }
 
-        public async Task<string?> Login(string name, string password)
+        public async Task<ServiceResponse<string>> Login(string name, string password)
         {
             ServiceResponse<string> response = new();
 
-            var user = await _unitOfWork.UserRepository.GetFirstOrDefault(u => u.Name.ToLower() == name.ToLower());
+            var user = await GetUserByName(name);
 
             if (user == null || !_jwtTokenService.IsValidPassword(password, user.PasswordHash, user.PasswordSalt))
             {
-                return null;
+                return response;
             }
 
             string tokenStr = _jwtTokenService.GenerateToken(user);
-
-            return tokenStr;
-        }
-
-        public async Task Register(User user, string password)
-        {
-            if (await UserExists(user.Name))
+            if (string.IsNullOrEmpty(tokenStr))
             {
-                return;
+                return response;
             }
 
-            (byte[] passwordHash, byte[] PasswordSalt) = _jwtTokenService.CreatePasswordHashSalt(password);
-            user.PasswordHash = passwordHash;
-            user.PasswordSalt = PasswordSalt;
+            response.Data = tokenStr;
+            response.Success = true;
 
-            _unitOfWork.UserRepository.Add(user);
+            return response;
         }
 
-        public async Task<bool> UserExists(string name)
+        public async Task<ServiceResponse<int>> Register(string name, string password)
         {
-            return await _unitOfWork.UserRepository.GetFirstOrDefault(u => u.Name.ToLower() == name.ToLower()) != null;
+            ServiceResponse<int> response = new();
+
+            var existingUser = await GetUserByName(name);
+            if (existingUser != null)
+            {
+                return response;
+            }
+
+            (byte[] passwordHash, byte[] passwordSalt) = _jwtTokenService.CreatePasswordHashSalt(password);
+
+            User user = new()
+            {
+                Name = name,
+                PasswordHash = passwordHash,
+                PasswordSalt = passwordSalt
+            };
+
+            _unitOfWork.UserRepository.Add(user);
+
+            response.Data = user.Id;
+            response.Success = true;
+
+            return response;
+        }
+
+        public async Task<User?> GetUserByName(string name)
+        {
+            return await _unitOfWork.UserRepository.GetFirstOrDefault(u => u.Name.ToLower() == name.ToLower());
         }
     }
 }

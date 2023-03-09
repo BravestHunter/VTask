@@ -2,6 +2,7 @@
 using Azure;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
+using NuGet.Protocol;
 using System.Threading.Tasks;
 using VTask.Model;
 using VTask.Model.DTO.User;
@@ -14,13 +15,11 @@ namespace VTask.Controllers.MVC
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IAuthService _authService;
-        private readonly IMapper _mapper;
 
-        public AuthController(IUnitOfWork unitOfWork, IAuthService authService, IMapper mapper)
+        public AuthController(IUnitOfWork unitOfWork, IAuthService authService)
         {
             _unitOfWork = unitOfWork;
             _authService = authService;
-            _mapper = mapper;
         }
 
         [HttpGet]
@@ -37,19 +36,21 @@ namespace VTask.Controllers.MVC
                 return View(requestDto);
             }
 
-            var user = _mapper.Map<User>(requestDto);
-            await _authService.Register(user, requestDto.Password);
-
-            await _unitOfWork.SaveChanges();
-
-            string? token = await _authService.Login(requestDto.Name, requestDto.Password);
-            if (string.IsNullOrEmpty(token))
+            var registerServiceResponse = await _authService.Register(requestDto.Name, requestDto.Password);
+            if (!registerServiceResponse.Success)
             {
                 return View(requestDto);
             }
 
+            await _unitOfWork.SaveChanges();
 
-            HttpContext.Response.Cookies.Append("JWT", token);
+            var loginServiceResponse = await _authService.Login(requestDto.Name, requestDto.Password);
+            if (!loginServiceResponse.Success)
+            {
+                return View(requestDto);
+            }
+
+            HttpContext.Response.Cookies.Append("JWT", loginServiceResponse.Data!);
 
             return RedirectToAction("Index", "Home");
         }
@@ -68,13 +69,13 @@ namespace VTask.Controllers.MVC
                 return View(requestDto);
             }
 
-            string? token = await _authService.Login(requestDto.Name, requestDto.Password);
-            if (string.IsNullOrEmpty(token))
+            var serviceResponse = await _authService.Login(requestDto.Name, requestDto.Password);
+            if (!serviceResponse.Success)
             {
                 return View(requestDto);
             }
 
-            HttpContext.Response.Cookies.Append("JWT", token);
+            HttpContext.Response.Cookies.Append("JWT", serviceResponse.Data!);
 
             return RedirectToAction("Index", "Home");
         }

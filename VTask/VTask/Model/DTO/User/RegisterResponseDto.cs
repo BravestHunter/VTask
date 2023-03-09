@@ -7,7 +7,5 @@ namespace VTask.Model.DTO.User
     {
         [Required]
         public int Id { get; set; }
-        [Required]
-        public string Name { get; set; } = string.Empty;
     }
 }
