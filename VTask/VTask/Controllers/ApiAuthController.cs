@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using VTask.Model.DTO;
+using VTask.Model;
+using VTask.Model.DTO.User;
 using VTask.Repositories;
 using VTask.Services;
 
@@ -10,32 +12,38 @@ namespace VTask.Controllers
     [Route("[controller]")]
     public class ApiAuthController : ControllerBase
     {
-        private readonly IAuthRepository _authRepository;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IAuthService _authService;
+        private readonly IMapper _mapper;
 
-        public ApiAuthController(IAuthRepository authRepository)
+        public ApiAuthController(IUnitOfWork unitOfWork, IAuthService authService, IMapper mapper)
         {
-            _authRepository = authRepository;
+            _unitOfWork = unitOfWork;
+            _authService = authService;
+            _mapper = mapper;
         }
 
         [HttpPost("Register")]
-        public async Task<ActionResult<ServiceResponse<int>>> Register(UserRegisterDto requestDto)
+        public async Task<ActionResult<RegisterResponseDto>> Register(RegisterRequestDto requestDto)
         {
-            var response = await _authRepository.Register(new Model.User() { Name = requestDto.Name }, requestDto.Password);
+            var user = _mapper.Map<User>(requestDto);
+            await _authService.Register(user, requestDto.Password);
 
-            if (!response.Success)
-            {
-                return BadRequest(response);
-            }
+            await _unitOfWork.SaveChanges();
+
+            var response = _mapper.Map<RegisterResponseDto>(user);
 
             return Ok(response);
         }
 
         [HttpPost("Login")]
-        public async Task<ActionResult<ServiceResponse<int>>> Login(UserLoginDto requestDto)
+        public async Task<ActionResult<ServiceResponse<int>>> Login(LoginRequestDto requestDto)
         {
-            var response = await _authRepository.Login(requestDto.Name, requestDto.Password);
+            string? token = await _authService.Login(requestDto.Name, requestDto.Password);
 
-            if (!response.Success)
+            LoginResponseDto response = new() { Token = token };
+
+            if (string.IsNullOrEmpty(token))
             {
                 return BadRequest(response);
             }

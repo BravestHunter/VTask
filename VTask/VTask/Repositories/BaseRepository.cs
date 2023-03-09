@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Elfie.Serialization;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,11 +9,11 @@ using VTask.Data;
 
 namespace VTask.Repositories
 {
-    public class Repository<T> : IRepository<T> where T : class
+    public class BaseRepository<T> : IRepository<T> where T : class
     {
         protected readonly DbSet<T> _dbSet;
 
-        public Repository(DefaultDbContext dbContext)
+        public BaseRepository(DefaultDbContext dbContext)
         {
             _dbSet = dbContext.Set<T>();
         }
@@ -20,6 +21,11 @@ namespace VTask.Repositories
         public async Task<T?> Get(int id)
         {
             return await _dbSet.FindAsync(id);
+        }
+
+        public async Task<T?> GetFirstOrDefault(Expression<Func<T, bool>> predicate)
+        {
+            return await _dbSet.FirstOrDefaultAsync(predicate);
         }
 
         public async Task<IEnumerable<T>> GetAll()

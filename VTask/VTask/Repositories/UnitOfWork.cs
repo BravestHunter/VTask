@@ -7,11 +7,13 @@ namespace VTask.Repositories
     {
         private readonly DefaultDbContext _dbContext;
 
+        public IUserRepository UserRepository { get; init; }
         public IUserTaskRepository UserTaskRepository { get; init; }
 
         public UnitOfWork(DefaultDbContext dbContext)
         {
             _dbContext = dbContext;
+            UserRepository = new UserRepository(dbContext);
             UserTaskRepository = new UserTaskRepository(dbContext);
         }
 

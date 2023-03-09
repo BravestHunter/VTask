@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using VTask.Model;
 using VTask.Model.DTO;
+using VTask.Model.DTO.User;
 
 namespace VTask
 {
@@ -20,7 +21,8 @@ namespace VTask
             CreateMap<UpdateUserTaskRequestDto, UserTask>();
             CreateMap<UserTask, DeleteUserTaskRequestDto>();
 
-            CreateMap<RegisterUserRequestDto, User>();
+            CreateMap<RegisterRequestDto, User>();
+            CreateMap<User, RegisterResponseDto>();
         }
     }
 }

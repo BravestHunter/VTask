@@ -5,7 +5,7 @@ using VTask.Model;
 
 namespace VTask.Repositories
 {
-    public class UserTaskRepository : Repository<UserTask>, IUserTaskRepository
+    public class UserTaskRepository : BaseRepository<UserTask>, IUserTaskRepository
     {
         public UserTaskRepository(DefaultDbContext dbContext) : base(dbContext)
         {

@@ -2,24 +2,24 @@
 using Azure;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using VTask.Model;
-using VTask.Model.DTO;
+using VTask.Model.DTO.User;
 using VTask.Repositories;
+using VTask.Services;
 
 namespace VTask.Controllers.MVC
 {
     public class AuthController : Controller
     {
-        private readonly IAuthRepository _authRepository;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IAuthService _authService;
         private readonly IMapper _mapper;
 
-        public AuthController(IAuthRepository authRepository, IMapper mapper)
+        public AuthController(IUnitOfWork unitOfWork, IAuthService authService, IMapper mapper)
         {
-            _authRepository = authRepository;
+            _unitOfWork = unitOfWork;
+            _authService = authService;
             _mapper = mapper;
         }
 
@@ -30,7 +30,7 @@ namespace VTask.Controllers.MVC
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register(RegisterUserRequestDto requestDto)
+        public async Task<IActionResult> Register(RegisterRequestDto requestDto)
         {
             if (!ModelState.IsValid)
             {
@@ -38,17 +38,18 @@ namespace VTask.Controllers.MVC
             }
 
             var user = _mapper.Map<User>(requestDto);
-            var registerResponse = await _authRepository.Register(user, requestDto.Password);
+            await _authService.Register(user, requestDto.Password);
 
-            if (!registerResponse.Success)
+            await _unitOfWork.SaveChanges();
+
+            string? token = await _authService.Login(requestDto.Name, requestDto.Password);
+            if (string.IsNullOrEmpty(token))
             {
                 return View(requestDto);
             }
 
-            var loginResponse = await _authRepository.Login(requestDto.Name, requestDto.Password);
-            // assert loginResponse successful
 
-            HttpContext.Response.Cookies.Append("JWT", loginResponse.Data!);
+            HttpContext.Response.Cookies.Append("JWT", token);
 
             return RedirectToAction("Index", "Home");
         }
@@ -67,14 +68,13 @@ namespace VTask.Controllers.MVC
                 return View(requestDto);
             }
 
-            var response = await _authRepository.Login(requestDto.Name, requestDto.Password);
-
-            if (!response.Success)
+            string? token = await _authService.Login(requestDto.Name, requestDto.Password);
+            if (string.IsNullOrEmpty(token))
             {
                 return View(requestDto);
             }
 
-            HttpContext.Response.Cookies.Append("JWT", response.Data!);
+            HttpContext.Response.Cookies.Append("JWT", token);
 
             return RedirectToAction("Index", "Home");
         }
