@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
-using VTask.Model;
-using VTask.Model.DTO;
+using VTask.Model.DAO;
+using VTask.Model.DTO.Task;
 using VTask.Model.DTO.User;
+using VTask.Model.MVC;
 
 namespace VTask
 {
@@ -9,19 +10,26 @@ namespace VTask
     {
         public AutoMapperProfile() 
         {
-            CreateMap<UserTask, GetUserTaskResponseDto>();
-            CreateMap<AddUserTaskRequestDto, UserTask>();
-            CreateMap<UserTask, AddUserTaskResponseDto>();
-            CreateMap<UpdateUserTaskRequestDto, UserTask>();
-            CreateMap<UserTask, UpdateUserTaskResponseDto>();
-            CreateMap<UserTask, DeleteUserTaskResponseDto>();
-
-            CreateMap<CreateUserTaskRequestDto, UserTask>();
-            CreateMap<UserTask, UpdateUserTaskRequestDto>();
-            CreateMap<UpdateUserTaskRequestDto, UserTask>();
-            CreateMap<UserTask, DeleteUserTaskRequestDto>();
-
+            // User
+            CreateMap<LoginModel, LoginRequestDto>();
             CreateMap<User, RegisterResponseDto>();
+
+            CreateMap<RegisterRequestDto, LoginRequestDto>();
+            CreateMap<RegisterModel, RegisterRequestDto>();
+            CreateMap<RegisterModel, LoginRequestDto>();
+
+            // Task
+            CreateMap<AddTaskRequestDto, Task>();
+            CreateMap<Task, GetTaskResponseDto>();
+            CreateMap<Task, AddTaskResponseDto>();
+            CreateMap<Task, UpdateTaskResponseDto>();
+            CreateMap<Task, RemoveTaskResponseDto>();
+
+            CreateMap<GetTaskResponseDto, TaskModel>();
+            CreateMap<GetTaskResponseDto, DeleteTaskModel>();
+            CreateMap<TaskModel, AddTaskRequestDto>();
+            CreateMap<TaskModel, UpdateTaskRequestDto>();
+            CreateMap<DeleteTaskModel, RemoveTaskRequestDto>();
         }
     }
 }

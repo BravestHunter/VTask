@@ -1,12 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using VTask.Model;
+using VTask.Model.DAO;
 
 namespace VTask.Data
 {
     public class DefaultDbContext : DbContext
     {
         public DbSet<User> Users => Set<User>();
-        public DbSet<UserTask> Tasks => Set<UserTask>();
+        public DbSet<Task> Tasks => Set<Task>();
 
         public DefaultDbContext(DbContextOptions<DefaultDbContext> options) : base(options)
         {

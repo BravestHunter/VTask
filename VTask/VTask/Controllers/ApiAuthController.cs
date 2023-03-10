@@ -12,44 +12,25 @@ namespace VTask.Controllers
     [Route("[controller]")]
     public class ApiAuthController : ControllerBase
     {
-        private readonly IUnitOfWork _unitOfWork;
         private readonly IAuthService _authService;
 
-        public ApiAuthController(IUnitOfWork unitOfWork, IAuthService authService)
+        public ApiAuthController(IAuthService authService)
         {
-            _unitOfWork = unitOfWork;
             _authService = authService;
         }
 
-        [HttpPost("Register")]
-        public async Task<ActionResult<RegisterResponseDto>> Register(RegisterRequestDto requestDto)
+        [HttpPost("Login")]
+        public async Task<ActionResult<LoginResponseDto>> Login(LoginRequestDto request)
         {
-            RegisterResponseDto response = new();
-
-            var serviceResponse = await _authService.Register(requestDto.Name, requestDto.Password);
-            if (!serviceResponse.Success)
-            {
-                return BadRequest(response);
-            }
-
-            await _unitOfWork.SaveChanges();
-
-            response.Id = serviceResponse.Data;
+            var response = await _authService.Login(request);
 
             return Ok(response);
         }
 
-        [HttpPost("Login")]
-        public async Task<ActionResult<ServiceResponse<int>>> Login(LoginRequestDto requestDto)
+        [HttpPost("Register")]
+        public async Task<ActionResult<RegisterResponseDto>> Register(RegisterRequestDto request)
         {
-            var serviceResponse = await _authService.Login(requestDto.Name, requestDto.Password);
-
-            LoginResponseDto response = new() { Token = serviceResponse.Data };
-
-            if (serviceResponse.Success)
-            {
-                return BadRequest(response);
-            }
+            var response = await _authService.Register(request);
 
             return Ok(response);
         }

@@ -5,7 +5,6 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using System;
-using VTask.Model;
 using System.Linq;
 using Microsoft.Extensions.Configuration;
 using VTask.Data;
@@ -14,73 +13,77 @@ using Microsoft.EntityFrameworkCore;
 using VTask.Repositories;
 using NuGet.Protocol.Core.Types;
 using Microsoft.AspNetCore.Identity;
+using VTask.Exceptions;
+using VTask.Model.DAO;
+using VTask.Model.DTO.User;
+using AutoMapper;
 
 namespace VTask.Services
 {
     public class AuthService : IAuthService
     {
-        private readonly IUnitOfWork _unitOfWork;
         private readonly IJwtTokenService _jwtTokenService;
+        private readonly IPasswordService _passwordService;
+        private readonly IMapper _mapper;
+        private readonly IUserRepository _userRepository;
 
-        public AuthService(IUnitOfWork unitOfWork, IJwtTokenService jwtTokenService)
+        public AuthService(IJwtTokenService jwtTokenService, IPasswordService passwordService, IMapper mapper, IUserRepository userRepository)
         {
-            _unitOfWork = unitOfWork;
             _jwtTokenService = jwtTokenService;
+            _passwordService = passwordService;
+            _mapper = mapper;
+            _userRepository = userRepository;
         }
 
-        public async Task<ServiceResponse<string>> Login(string name, string password)
+        public async Task<LoginResponseDto> Login(LoginRequestDto request)
         {
-            ServiceResponse<string> response = new();
-
-            var user = await GetUserByName(name);
-
-            if (user == null || !_jwtTokenService.IsValidPassword(password, user.PasswordHash, user.PasswordSalt))
+            var user = await _userRepository.Get(request.Username);
+            if (user == null)
             {
-                return response;
+                throw new DbEntryNotFoundException($"User with username '{request.Username}' was not found");
             }
 
-            string tokenStr = _jwtTokenService.GenerateToken(user);
-            if (string.IsNullOrEmpty(tokenStr))
+            if (!_passwordService.IsValidPassword(request.Password, user.PasswordHash, user.PasswordSalt))
             {
-                return response;
+                throw new PasswordNotValidException();
             }
 
-            response.Data = tokenStr;
-            response.Success = true;
+            (string token, DateTime expirationDate) = _jwtTokenService.GenerateToken(user);
+
+            LoginResponseDto response = new()
+            {
+                Token = token,
+                ExpirationDate = expirationDate
+            };
 
             return response;
         }
 
-        public async Task<ServiceResponse<int>> Register(string name, string password)
+        public async Task<RegisterResponseDto> Register(RegisterRequestDto request)
         {
-            ServiceResponse<int> response = new();
-
-            var existingUser = await GetUserByName(name);
+            var existingUser = await _userRepository.Get(request.Username);
             if (existingUser != null)
             {
-                return response;
+                throw new DbEntryAlreadyExists($"User with username {request.Username} already exists");
             }
 
-            (byte[] passwordHash, byte[] passwordSalt) = _jwtTokenService.CreatePasswordHashSalt(password);
+            (byte[] passwordHash, byte[] passwordSalt) = _passwordService.CreatePasswordHashSalt(request.Password);
 
             User user = new()
             {
-                Name = name,
+                Username = request.Username,
                 PasswordHash = passwordHash,
-                PasswordSalt = passwordSalt
+                PasswordSalt = passwordSalt,
+                CreationTime = DateTime.Now
             };
 
-            _unitOfWork.UserRepository.Add(user);
+            _userRepository.Add(user);
 
-            response.Data = user.Id;
-            response.Success = true;
+            await _userRepository.SaveChanges();
+
+            var response = _mapper.Map<RegisterResponseDto>(user);
 
             return response;
-        }
-
-        public async Task<User?> GetUserByName(string name)
-        {
-            return await _unitOfWork.UserRepository.GetFirstOrDefault(u => u.Name.ToLower() == name.ToLower());
         }
     }
 }

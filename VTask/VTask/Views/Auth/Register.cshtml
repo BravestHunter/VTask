@@ -1,4 +1,4 @@
-﻿@model RegisterRequestDto
+﻿@model RegisterModel
 @{
     Layout = "_AuthLayout";
     ViewData["Title"] = "Register";
@@ -9,9 +9,9 @@
     <h2 class="fw-bold mb-2 text-uppercase">Registration</h2>
 
     <div class="form-outline form-white mb-4">
-        <label asp-for="Name" class="form-label"></label>
-        <input asp-for="Name" class="form-control form-control-lg" />
-        <span asp-validation-for="Name" class="text-danger"></span>
+        <label asp-for="Username" class="form-label"></label>
+        <input asp-for="Username" class="form-control form-control-lg" />
+        <span asp-validation-for="Username" class="text-danger"></span>
     </div>
 
     <div class="form-outline form-white mb-4">

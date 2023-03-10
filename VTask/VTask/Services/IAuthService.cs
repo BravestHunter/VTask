@@ -1,11 +1,12 @@
 ﻿using System.Threading.Tasks;
-using VTask.Model;
+using VTask.Model.DAO;
+using VTask.Model.DTO.User;
 
 namespace VTask.Services
 {
     public interface IAuthService
     {
-        Task<ServiceResponse<string>> Login(string name, string password);
-        Task<ServiceResponse<int>> Register(string name, string password);
+        Task<LoginResponseDto> Login(LoginRequestDto request);
+        Task<RegisterResponseDto> Register(RegisterRequestDto request);
     }
 }

@@ -1,12 +1,11 @@
-﻿using System.Threading.Tasks;
-using VTask.Model;
+﻿using System;
+using System.Threading.Tasks;
+using VTask.Model.DAO;
 
 namespace VTask.Services
 {
     public interface IJwtTokenService
     {
-        string GenerateToken(User user);
-        (byte[] passwordHash, byte[] PasswordSalt) CreatePasswordHashSalt(string password);
-        bool IsValidPassword(string password, byte[] passwordHash, byte[] passwordSalt);
+        (string token, DateTime expirationDate) GenerateToken(User user);
     }
 }

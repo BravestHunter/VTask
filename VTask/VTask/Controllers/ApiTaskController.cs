@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Azure.Core;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,6 +7,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using VTask.Model;
 using VTask.Model.DTO;
+using VTask.Model.DTO.Task;
 using VTask.Services;
 
 namespace VTask.Controllers
@@ -15,61 +17,51 @@ namespace VTask.Controllers
     [Route("api/[controller]")]
     public class ApiTaskController : ControllerBase
     {
-        private readonly IUserTaskService _userTaskService;
+        private readonly ITaskService _userTaskService;
 
-        public ApiTaskController(IUserTaskService userTaskService)
+        public ApiTaskController(ITaskService userTaskService)
         {
             _userTaskService = userTaskService;
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ServiceResponse<GetUserTaskResponseDto>>> GetTask(int id)
+        public async Task<ActionResult<GetTaskResponseDto>> Get(GetTaskRequestDto request)
         {
-            var serviceResponse = await _userTaskService.Get(id);
+            var response = await _userTaskService.Get(request);
 
-            return Ok(serviceResponse);
+            return Ok(response);
         }
 
         [HttpGet("all")]
-        public async Task<ActionResult<ServiceResponse<IEnumerable<GetUserTaskResponseDto>>>> GetAllTasks()
+        public async Task<ActionResult<IEnumerable<GetTaskResponseDto>>> GetAll()
         {
-            var serviceResponse = await _userTaskService.GetAll();
+            var response = await _userTaskService.GetAll();
 
-            return Ok(serviceResponse);
+            return Ok(response);
         }
 
         [HttpPost]
-        public async Task<ActionResult<ServiceResponse<AddUserTaskResponseDto>>> AddTask(AddUserTaskRequestDto addTaskRequestDto)
+        public async Task<ActionResult<AddTaskResponseDto>> Add(AddTaskRequestDto request)
         {
-            var serviceResponse = await _userTaskService.Add(addTaskRequestDto);
+            var response = await _userTaskService.Add(request);
 
-            return Ok(serviceResponse);
+            return Ok(response);
         }
 
         [HttpPut]
-        public async Task<ActionResult<ServiceResponse<AddUserTaskResponseDto>>> UpdateTask(UpdateUserTaskRequestDto updateTaskRequestDto)
+        public async Task<ActionResult<UpdateTaskResponseDto>> Update(UpdateTaskRequestDto request)
         {
-            var serviceResponse = await _userTaskService.Update(updateTaskRequestDto);
+            var response = await _userTaskService.Update(request);
 
-            if (!serviceResponse.Success)
-            {
-                return NotFound(serviceResponse);
-            }
-
-            return Ok(serviceResponse);
+            return Ok(response);
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<ServiceResponse<GetUserTaskResponseDto>>> DeleteTask(int id)
+        public async Task<ActionResult<RemoveTaskResponseDto>> Remove(RemoveTaskRequestDto request)
         {
-            var serviceResponse = await _userTaskService.Delete(id);
+            var response = await _userTaskService.Remove(request);
 
-            if (!serviceResponse.Success)
-            {
-                return NotFound(serviceResponse);
-            }
-
-            return Ok(serviceResponse);
+            return Ok(response);
         }
     }
 }

@@ -1,58 +1,22 @@
 ﻿using AutoMapper;
-using Azure;
-using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using NuGet.Protocol;
 using System.Threading.Tasks;
-using VTask.Model;
 using VTask.Model.DTO.User;
-using VTask.Repositories;
+using VTask.Model.MVC;
 using VTask.Services;
 
 namespace VTask.Controllers.MVC
 {
     public class AuthController : Controller
     {
-        private readonly IUnitOfWork _unitOfWork;
         private readonly IAuthService _authService;
+        private readonly IMapper _mapper;
 
-        public AuthController(IUnitOfWork unitOfWork, IAuthService authService)
+        public AuthController(IAuthService authService, IMapper mapper)
         {
-            _unitOfWork = unitOfWork;
             _authService = authService;
-        }
-
-        [HttpGet]
-        public IActionResult Register()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Register(RegisterRequestDto requestDto)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(requestDto);
-            }
-
-            var registerServiceResponse = await _authService.Register(requestDto.Name, requestDto.Password);
-            if (!registerServiceResponse.Success)
-            {
-                return View(requestDto);
-            }
-
-            await _unitOfWork.SaveChanges();
-
-            var loginServiceResponse = await _authService.Login(requestDto.Name, requestDto.Password);
-            if (!loginServiceResponse.Success)
-            {
-                return View(requestDto);
-            }
-
-            HttpContext.Response.Cookies.Append("JWT", loginServiceResponse.Data!);
-
-            return RedirectToAction("Index", "Home");
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -62,20 +26,15 @@ namespace VTask.Controllers.MVC
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(LoginRequestDto requestDto)
+        public async Task<IActionResult> Login(LoginModel model)
         {
             if (!ModelState.IsValid)
             {
-                return View(requestDto);
+                return View(model);
             }
 
-            var serviceResponse = await _authService.Login(requestDto.Name, requestDto.Password);
-            if (!serviceResponse.Success)
-            {
-                return View(requestDto);
-            }
-
-            HttpContext.Response.Cookies.Append("JWT", serviceResponse.Data!);
+            var loginRequest = _mapper.Map<LoginRequestDto>(model);
+            await Login(loginRequest);
 
             return RedirectToAction("Index", "Home");
         }
@@ -86,6 +45,40 @@ namespace VTask.Controllers.MVC
             HttpContext.Response.Cookies.Delete("JWT");
 
             return RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet]
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Register(RegisterModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var registerRequest = _mapper.Map<RegisterRequestDto>(model);
+            var registerResponse = await _authService.Register(registerRequest);
+
+            var loginRequest = _mapper.Map<LoginRequestDto>(registerRequest);
+            await Login(loginRequest);
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        private async Task Login(LoginRequestDto request)
+        {
+            var response = await _authService.Login(request);
+
+            CookieOptions cookieOptions = new CookieOptions()
+            {
+                Expires = response.ExpirationDate
+            };
+            HttpContext.Response.Cookies.Append("JWT", response.Token, cookieOptions);
         }
     }
 }

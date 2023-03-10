@@ -11,10 +11,12 @@ namespace VTask.Repositories
 {
     public class BaseRepository<T> : IRepository<T> where T : class
     {
+        protected readonly DefaultDbContext _dbContext;
         protected readonly DbSet<T> _dbSet;
 
         public BaseRepository(DefaultDbContext dbContext)
         {
+            _dbContext = dbContext;
             _dbSet = dbContext.Set<T>();
         }
 
@@ -49,6 +51,11 @@ namespace VTask.Repositories
         {
             var entityEntry = _dbSet.Remove(entity);
             return entityEntry.Entity;
+        }
+
+        public async Task SaveChanges()
+        {
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

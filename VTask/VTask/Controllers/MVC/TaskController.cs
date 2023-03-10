@@ -4,8 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using VTask.Model;
+using VTask.Model.DAO;
 using VTask.Model.DTO;
+using VTask.Model.DTO.Task;
+using VTask.Model.MVC;
 using VTask.Repositories;
 using VTask.Services;
 
@@ -14,12 +16,12 @@ namespace VTask.Controllers.MVC
     [Authorize]
     public class TaskController : Controller
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly ITaskService _taskService;
         private readonly IMapper _mapper;
 
-        public TaskController(IUnitOfWork unitOfWork, IMapper mapper)
+        public TaskController(ITaskService taskService, IMapper mapper)
         {
-            _unitOfWork = unitOfWork;
+            _taskService = taskService;
             _mapper = mapper;
         }
 
@@ -32,9 +34,11 @@ namespace VTask.Controllers.MVC
         [HttpGet]
         public async Task<IActionResult> All()
         {
-            IEnumerable<UserTask> tasks = await _unitOfWork.UserTaskRepository.GetAll();
+            var tasks = await _taskService.GetAll();
 
-            return View(tasks);
+            var taskModels = tasks.Select(t => _mapper.Map<TaskModel>(t));
+
+            return View(taskModels);
         }
 
         [HttpGet]
@@ -45,17 +49,15 @@ namespace VTask.Controllers.MVC
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CreateUserTaskRequestDto requestDto)
+        public async Task<IActionResult> Create(TaskModel model)
         {
             if (!ModelState.IsValid)
             {
-                return View(requestDto);
+                return View(model);
             }
 
-            var task = _mapper.Map<UserTask>(requestDto);
-            _unitOfWork.UserTaskRepository.Add(task);
-
-            await _unitOfWork.SaveChanges();
+            var request = _mapper.Map<AddTaskRequestDto>(model);
+            var response = await _taskService.Add(request);
 
             TempData["SuccessMessage"] = "Task was created successfully";
 
@@ -70,30 +72,25 @@ namespace VTask.Controllers.MVC
                 return NotFound();
             }
 
-            var task = await _unitOfWork.UserTaskRepository.Get(id.Value);
-            if (task == null)
-            {
-                return NotFound();
-            }
+            var request = new GetTaskRequestDto() { Id = id.Value };
+            var response = await _taskService.Get(request);
 
-            var requestDto = _mapper.Map<UpdateUserTaskRequestDto>(task);
+            var model = _mapper.Map<TaskModel>(response);
 
-            return View(requestDto);
+            return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Update(UpdateUserTaskRequestDto requestDto)
+        public async Task<IActionResult> Update(TaskModel model)
         {
             if (!ModelState.IsValid)
             {
-                return View(requestDto);
+                return View(model);
             }
 
-            var task = _mapper.Map<UserTask>(requestDto);
-            _unitOfWork.UserTaskRepository.Update(task);
-
-            await _unitOfWork.SaveChanges();
+            var request = _mapper.Map<UpdateTaskRequestDto>(model);
+            var response = await _taskService.Update(request);
 
             TempData["SuccessMessage"] = "Task was updated successfully";
 
@@ -108,35 +105,25 @@ namespace VTask.Controllers.MVC
                 return NotFound();
             }
 
-            var task = await _unitOfWork.UserTaskRepository.Get(id.Value);
-            if (task == null)
-            {
-                return NotFound();
-            }
+            var request = new GetTaskRequestDto() { Id = id.Value };
+            var response = await _taskService.Get(request);
 
-            var requestDto = _mapper.Map<DeleteUserTaskRequestDto>(task);
+            var model = _mapper.Map<DeleteTaskModel>(response);
 
-            return View(requestDto);
+            return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(DeleteUserTaskRequestDto requestDto)
+        public async Task<IActionResult> Delete(DeleteTaskModel model)
         {
             if (!ModelState.IsValid)
             {
-                return View(requestDto);
+                return View(model);
             }
 
-            var task = await _unitOfWork.UserTaskRepository.Get(requestDto.Id);
-            if (task == null)
-            {
-                return NotFound();
-            }
-
-            _unitOfWork.UserTaskRepository.Remove(task);
-
-            await _unitOfWork.SaveChanges();
+            var request = _mapper.Map<RemoveTaskRequestDto>(model);
+            var response = await _taskService.Remove(request);
 
             TempData["SuccessMessage"] = "Task was deleted successfully";
 

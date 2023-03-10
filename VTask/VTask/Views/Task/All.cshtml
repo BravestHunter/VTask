@@ -1,4 +1,4 @@
-﻿@model IEnumerable<UserTask>
+﻿@model IEnumerable<TaskModel>
 @{
     ViewData["Title"] = "Last tasks";
 }
@@ -28,7 +28,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (UserTask task in Model)
+        @foreach (var task in Model)
         {
             <tr>
                 <td>
