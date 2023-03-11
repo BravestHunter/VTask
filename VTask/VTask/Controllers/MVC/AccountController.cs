@@ -52,7 +52,32 @@ namespace VTask.Controllers.MVC
 
             TempData[Constants.Notification.SuccessMessageTempBagKey] = "Account data was updated successfully";
 
-            return RedirectToAction(nameof(Info));
+            return RedirectToAction("Info");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ChangePassword()
+        {
+            var response = await GetAuthenticatedUser();
+            var model = _mapper.Map<PasswordChangeModel>(response);
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword(PasswordChangeModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var request = _mapper.Map<UserChangePasswordRequestDto>(model);
+            var response = await _userService.ChangePassword(request);
+
+            TempData[Constants.Notification.SuccessMessageTempBagKey] = "Password was changed successfully";
+
+            return RedirectToAction("Logout", "Auth");
         }
 
         private async Task<UserGetResponseDto> GetAuthenticatedUser()

@@ -7,5 +7,6 @@ namespace VTask.Services
     {
         Task<UserGetResponseDto> Get(UserGetRequestDto request);
         Task<UserUpdateResponseDto> Update(UserUpdateRequestDto request);
+        Task<UserChangePasswordResponseDto> ChangePassword(UserChangePasswordRequestDto request);
     }
 }

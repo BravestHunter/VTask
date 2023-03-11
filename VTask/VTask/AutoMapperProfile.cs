@@ -19,8 +19,11 @@ namespace VTask
             CreateMap<User, UserModel>();
             CreateMap<User, UserGetResponseDto>();
             CreateMap<User, UserUpdateResponseDto>();
+            CreateMap<User, UserChangePasswordResponseDto>();
             CreateMap<UserGetResponseDto, UserModel>();
+            CreateMap<UserGetResponseDto, PasswordChangeModel>();
             CreateMap<UserModel, UserUpdateRequestDto>();
+            CreateMap<PasswordChangeModel, UserChangePasswordRequestDto>();
 
             // Task
             CreateMap<TaskAddRequestDto, Task>();

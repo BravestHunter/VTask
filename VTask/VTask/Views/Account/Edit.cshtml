@@ -9,6 +9,8 @@
 
 <form method="post" class="container-fluid bg-secondary rounded-borders-block py-3">
 
+    <input asp-for="Id" type="hidden" />
+
     <h2 class="text-center text-light pb-4">@(User.Identity?.Name ?? string.Empty)</h2>
 
     <div class="row">
@@ -32,7 +34,8 @@
 
     <div class="row">
         <div class="d-grid gap-2 col-6 mx-auto pt-4">
-            <button type="submit" class="btn btn-outline-dark">Save</button>
+            <button type="submit" class="btn btn-success">Save</button>
+            <a asp-action="Info" class="btn btn-outline-light">Back</a>
         </div>
     </div>
 
