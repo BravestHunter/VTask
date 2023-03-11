@@ -20,7 +20,7 @@ namespace VTask.Services
             _taskRepository = taskRepository;
         }
 
-        public async Task<GetTaskResponseDto> Get(GetTaskRequestDto request)
+        public async Task<TaskGetResponseDto> Get(TaskGetRequestDto request)
         {
             var task = await _taskRepository.Get(request.Id);
             if (task == null)
@@ -28,33 +28,33 @@ namespace VTask.Services
                 throw new DbEntryNotFoundException($"Task with id '{request.Id}' was not found");
             }
 
-            var response = _mapper.Map<GetTaskResponseDto>(task);
+            var response = _mapper.Map<TaskGetResponseDto>(task);
 
             return response;
         }
 
-        public async Task<IEnumerable<GetTaskResponseDto>> GetAll()
+        public async Task<IEnumerable<TaskGetResponseDto>> GetAll()
         {
             var tasks = await _taskRepository.GetAll();
 
-            var response = tasks.Select(t => _mapper.Map<GetTaskResponseDto>(t));
+            var response = tasks.Select(t => _mapper.Map<TaskGetResponseDto>(t));
 
             return response;
         }
 
-        public async Task<AddTaskResponseDto> Add(AddTaskRequestDto request)
+        public async Task<TaskAddResponseDto> Add(TaskAddRequestDto request)
         {
             var task = _mapper.Map<VTask.Model.DAO.Task>(request);
             _taskRepository.Add(task);
 
             await _taskRepository.SaveChanges();
 
-            var response = _mapper.Map<AddTaskResponseDto>(task);
+            var response = _mapper.Map<TaskAddResponseDto>(task);
 
             return response;
         }
 
-        public async Task<UpdateTaskResponseDto> Update(UpdateTaskRequestDto request)
+        public async Task<TaskUpdateResponseDto> Update(TaskUpdateRequestDto request)
         {
             var task = await _taskRepository.Get(request.Id);
             if (task == null)
@@ -68,12 +68,12 @@ namespace VTask.Services
 
             await _taskRepository.SaveChanges();
 
-            var response = _mapper.Map<UpdateTaskResponseDto>(task);
+            var response = _mapper.Map<TaskUpdateResponseDto>(task);
 
             return response;
         }
 
-        public async Task<RemoveTaskResponseDto> Remove(RemoveTaskRequestDto request)
+        public async Task<TaskRemoveResponseDto> Remove(TaskRemoveTRequestDto request)
         {
             var task = await _taskRepository.Get(request.Id);
             if (task == null)
@@ -85,7 +85,7 @@ namespace VTask.Services
 
             await _taskRepository.SaveChanges();
 
-            var response = _mapper.Map<RemoveTaskResponseDto>(task);
+            var response = _mapper.Map<TaskRemoveResponseDto>(task);
 
             return response;
         }

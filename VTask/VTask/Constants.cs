@@ -25,5 +25,10 @@
 
             public const string DefaultTitle = "Title";
         }
+
+        public static class Notification
+        {
+            public const string SuccessMessageTempBagKey = "SuccessMessage";
+        }
     }
 }

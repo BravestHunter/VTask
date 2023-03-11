@@ -25,7 +25,7 @@ namespace VTask.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<GetTaskResponseDto>> Get(GetTaskRequestDto request)
+        public async Task<ActionResult<TaskGetResponseDto>> Get(TaskGetRequestDto request)
         {
             var response = await _userTaskService.Get(request);
 
@@ -33,7 +33,7 @@ namespace VTask.Controllers
         }
 
         [HttpGet("all")]
-        public async Task<ActionResult<IEnumerable<GetTaskResponseDto>>> GetAll()
+        public async Task<ActionResult<IEnumerable<TaskGetResponseDto>>> GetAll()
         {
             var response = await _userTaskService.GetAll();
 
@@ -41,7 +41,7 @@ namespace VTask.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<AddTaskResponseDto>> Add(AddTaskRequestDto request)
+        public async Task<ActionResult<TaskAddResponseDto>> Add(TaskAddRequestDto request)
         {
             var response = await _userTaskService.Add(request);
 
@@ -49,7 +49,7 @@ namespace VTask.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<UpdateTaskResponseDto>> Update(UpdateTaskRequestDto request)
+        public async Task<ActionResult<TaskUpdateResponseDto>> Update(TaskUpdateRequestDto request)
         {
             var response = await _userTaskService.Update(request);
 
@@ -57,7 +57,7 @@ namespace VTask.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<RemoveTaskResponseDto>> Remove(RemoveTaskRequestDto request)
+        public async Task<ActionResult<TaskRemoveResponseDto>> Remove(TaskRemoveTRequestDto request)
         {
             var response = await _userTaskService.Remove(request);
 

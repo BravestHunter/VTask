@@ -8,10 +8,10 @@ namespace VTask.Services
 {
     public interface ITaskService
     {
-        Task<GetTaskResponseDto> Get(GetTaskRequestDto request);
-        Task<IEnumerable<GetTaskResponseDto>> GetAll();
-        Task<AddTaskResponseDto> Add(AddTaskRequestDto request);
-        Task<UpdateTaskResponseDto> Update(UpdateTaskRequestDto request);
-        Task<RemoveTaskResponseDto> Remove(RemoveTaskRequestDto request);
+        Task<TaskGetResponseDto> Get(TaskGetRequestDto request);
+        Task<IEnumerable<TaskGetResponseDto>> GetAll();
+        Task<TaskAddResponseDto> Add(TaskAddRequestDto request);
+        Task<TaskUpdateResponseDto> Update(TaskUpdateRequestDto request);
+        Task<TaskRemoveResponseDto> Remove(TaskRemoveTRequestDto request);
     }
 }

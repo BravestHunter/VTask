@@ -56,10 +56,10 @@ namespace VTask.Controllers.MVC
                 return View(model);
             }
 
-            var request = _mapper.Map<AddTaskRequestDto>(model);
+            var request = _mapper.Map<TaskAddRequestDto>(model);
             var response = await _taskService.Add(request);
 
-            TempData["SuccessMessage"] = "Task was created successfully";
+            TempData[Constants.Notification.SuccessMessageTempBagKey] = "Task was created successfully";
 
             return RedirectToAction(nameof(All));
         }
@@ -72,7 +72,7 @@ namespace VTask.Controllers.MVC
                 return NotFound();
             }
 
-            var request = new GetTaskRequestDto() { Id = id.Value };
+            var request = new TaskGetRequestDto() { Id = id.Value };
             var response = await _taskService.Get(request);
 
             var model = _mapper.Map<TaskModel>(response);
@@ -89,10 +89,10 @@ namespace VTask.Controllers.MVC
                 return View(model);
             }
 
-            var request = _mapper.Map<UpdateTaskRequestDto>(model);
+            var request = _mapper.Map<TaskUpdateRequestDto>(model);
             var response = await _taskService.Update(request);
 
-            TempData["SuccessMessage"] = "Task was updated successfully";
+            TempData[Constants.Notification.SuccessMessageTempBagKey] = "Task was updated successfully";
 
             return RedirectToAction(nameof(All));
         }
@@ -105,7 +105,7 @@ namespace VTask.Controllers.MVC
                 return NotFound();
             }
 
-            var request = new GetTaskRequestDto() { Id = id.Value };
+            var request = new TaskGetRequestDto() { Id = id.Value };
             var response = await _taskService.Get(request);
 
             var model = _mapper.Map<DeleteTaskModel>(response);
@@ -122,10 +122,10 @@ namespace VTask.Controllers.MVC
                 return View(model);
             }
 
-            var request = _mapper.Map<RemoveTaskRequestDto>(model);
+            var request = _mapper.Map<TaskRemoveTRequestDto>(model);
             var response = await _taskService.Remove(request);
 
-            TempData["SuccessMessage"] = "Task was deleted successfully";
+            TempData[Constants.Notification.SuccessMessageTempBagKey] = "Task was deleted successfully";
 
             return RedirectToAction(nameof(All));
         }

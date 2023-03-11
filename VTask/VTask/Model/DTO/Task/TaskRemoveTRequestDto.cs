@@ -1,6 +1,6 @@
 ﻿namespace VTask.Model.DTO.Task
 {
-    public class AddTaskResponseDto
+    public class TaskRemoveTRequestDto
     {
         public int Id { get; set; }
     }

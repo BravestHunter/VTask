@@ -1,6 +1,6 @@
 ﻿namespace VTask.Model.DTO.Task
 {
-    public class GetTaskRequestDto
+    public class TaskGetRequestDto
     {
         public int Id { get; set; }
     }

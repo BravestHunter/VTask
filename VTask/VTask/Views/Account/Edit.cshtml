@@ -1,6 +1,39 @@
-﻿@{
+﻿@model UserModel
+@{
     ViewData["Title"] = "Account edit";
 }
 
+<div>
+    <h1 class="text-center p-5">Account edit</h1>
+</div>
 
-<h1>ACCOUNT EDIT</h1>
+<form method="post" class="container-fluid bg-secondary rounded-borders-block py-3">
+
+    <h2 class="text-center text-light pb-4">@(User.Identity?.Name ?? string.Empty)</h2>
+
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="bg-light rounded-borders-block m-2">
+                <div class="input-group">
+                    <label asp-for="Email" class="input-label-block p-2 px-4"></label>
+                    <input asp-for="Email" class="form-control rounded-borders-block" />
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="bg-light rounded-borders-block m-2">
+                <div class="input-group">
+                    <label asp-for="Nickname" class="input-label-block p-2 px-4"></label>
+                    <input asp-for="Nickname" class="form-control rounded-borders-block" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="d-grid gap-2 col-6 mx-auto pt-4">
+            <button type="submit" class="btn btn-outline-dark">Save</button>
+        </div>
+    </div>
+
+</form>

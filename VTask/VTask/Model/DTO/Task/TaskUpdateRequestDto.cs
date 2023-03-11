@@ -1,6 +1,6 @@
 ﻿namespace VTask.Model.DTO.Task
 {
-    public class GetTaskResponseDto
+    public class TaskUpdateRequestDto
     {
         public int Id { get; set; }
         public string Title { get; set; } = Constants.Task.DefaultTitle;

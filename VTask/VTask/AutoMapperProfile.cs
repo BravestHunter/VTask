@@ -13,24 +13,27 @@ namespace VTask
             // User
             CreateMap<LoginModel, LoginRequestDto>();
             CreateMap<User, RegisterResponseDto>();
-
             CreateMap<RegisterRequestDto, LoginRequestDto>();
             CreateMap<RegisterModel, RegisterRequestDto>();
             CreateMap<RegisterModel, LoginRequestDto>();
             CreateMap<User, UserModel>();
+            CreateMap<User, UserGetResponseDto>();
+            CreateMap<User, UserUpdateResponseDto>();
+            CreateMap<UserGetResponseDto, UserModel>();
+            CreateMap<UserModel, UserUpdateRequestDto>();
 
             // Task
-            CreateMap<AddTaskRequestDto, Task>();
-            CreateMap<Task, GetTaskResponseDto>();
-            CreateMap<Task, AddTaskResponseDto>();
-            CreateMap<Task, UpdateTaskResponseDto>();
-            CreateMap<Task, RemoveTaskResponseDto>();
+            CreateMap<TaskAddRequestDto, Task>();
+            CreateMap<Task, TaskGetResponseDto>();
+            CreateMap<Task, TaskAddResponseDto>();
+            CreateMap<Task, TaskUpdateResponseDto>();
+            CreateMap<Task, TaskRemoveResponseDto>();
 
-            CreateMap<GetTaskResponseDto, TaskModel>();
-            CreateMap<GetTaskResponseDto, DeleteTaskModel>();
-            CreateMap<TaskModel, AddTaskRequestDto>();
-            CreateMap<TaskModel, UpdateTaskRequestDto>();
-            CreateMap<DeleteTaskModel, RemoveTaskRequestDto>();
+            CreateMap<TaskGetResponseDto, TaskModel>();
+            CreateMap<TaskGetResponseDto, DeleteTaskModel>();
+            CreateMap<TaskModel, TaskAddRequestDto>();
+            CreateMap<TaskModel, TaskUpdateRequestDto>();
+            CreateMap<DeleteTaskModel, TaskRemoveTRequestDto>();
         }
     }
 }
