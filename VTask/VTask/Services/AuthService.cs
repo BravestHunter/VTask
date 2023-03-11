@@ -1,18 +1,6 @@
-﻿using Microsoft.IdentityModel.Tokens;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Security.Cryptography;
-using System.Text;
-using System;
-using System.Linq;
-using Microsoft.Extensions.Configuration;
-using VTask.Data;
+﻿using System;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using VTask.Repositories;
-using NuGet.Protocol.Core.Types;
-using Microsoft.AspNetCore.Identity;
 using VTask.Exceptions;
 using VTask.Model.DAO;
 using VTask.Model.DTO.User;
@@ -72,9 +60,9 @@ namespace VTask.Services
             User user = new()
             {
                 Username = request.Username,
+                Nickname = request.Username,
                 PasswordHash = passwordHash,
-                PasswordSalt = passwordSalt,
-                CreationTime = DateTime.Now
+                PasswordSalt = passwordSalt
             };
 
             _userRepository.Add(user);

@@ -13,7 +13,7 @@ namespace VTask.Model.DAO
 
         [Required]
         [MinLength(Constants.User.MinUsernameLength), MaxLength(Constants.User.MaxUsernameLength)]
-        public string Username { get; set; } = string.Empty;
+        public string Username { get; set; } = Constants.User.DefaultUsername;
 
         [Required]
         public byte[] PasswordHash { get; set; } = new byte[0];
@@ -21,9 +21,6 @@ namespace VTask.Model.DAO
         [Required]
         public byte[] PasswordSalt { get; set; } = new byte[0];
 
-        [Required]
-        public DateTime CreationTime { get; set; } = DateTime.Now;
-            
         [MinLength(Constants.User.MinEmailLength), MaxLength(Constants.User.MaxEmailLength)]
         public string? Email { get; set; } = null;
 

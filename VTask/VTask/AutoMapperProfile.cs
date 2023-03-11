@@ -17,6 +17,7 @@ namespace VTask
             CreateMap<RegisterRequestDto, LoginRequestDto>();
             CreateMap<RegisterModel, RegisterRequestDto>();
             CreateMap<RegisterModel, LoginRequestDto>();
+            CreateMap<User, UserModel>();
 
             // Task
             CreateMap<AddTaskRequestDto, Task>();

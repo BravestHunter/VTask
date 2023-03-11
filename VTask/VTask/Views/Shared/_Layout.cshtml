@@ -36,7 +36,14 @@
                     <ul class="navbar-nav">
                         @if (User.Identity?.IsAuthenticated ?? false)
                         {
-                            <a class="nav-link" asp-controller="Auth" asp-action="Logout">Logout</a>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">@User.Identity.Name</a>
+                                <div class="dropdown-menu dropdown-menu-end">
+                                    <a class="dropdown-item" asp-controller="Account" asp-action="Info">Info</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" asp-controller="Auth" asp-action="Logout">Logout</a>
+                                </div>
+                            </li>
                         }
                         else
                         {
@@ -48,6 +55,7 @@
             </div>
         </nav>
     </header>
+
     <div class="container">
         <main role="main" class="pb-3">
             <partial name="_Notification" />
@@ -55,8 +63,8 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
+    <footer class="border-top footer fixed-bottom bg-light text-muted">
+        <div class="container-fluid my-3">
             &copy; 2023 - VTask - <a asp-controller="Home" asp-action="Privacy">Privacy</a> - <a asp-controller="Home" asp-action="Contacts">Contacts</a>
         </div>
     </footer>

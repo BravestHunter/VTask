@@ -12,6 +12,8 @@
             public const int MaxEmailLength = 320;
             public const int MinNicknameLength = 4;
             public const int MaxNicknameLength = 16;
+
+            public const string DefaultUsername = "Username";
         }
 
         public static class Task
