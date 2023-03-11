@@ -5,6 +5,7 @@ namespace VTask.Model.MVC
 {
     public class PasswordChangeModel
     {
+        [Required]
         public int Id { get; set; }
 
         [Required]
@@ -14,7 +15,7 @@ namespace VTask.Model.MVC
 
         [Required]
         [DataType(DataType.Password)]
-        [MinLength(Constants.User.MinPasswordLength), MaxLength(Constants.User.MaxPasswordLength)]
+        [StringLength(Constants.User.MaxPasswordLength, MinimumLength = Constants.User.MinPasswordLength)]
         [DisplayName("New")]
         public string NewPassword { get; set; } = string.Empty;
 

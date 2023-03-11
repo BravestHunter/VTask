@@ -5,12 +5,12 @@ namespace VTask.Model.MVC
     public class LoginModel
     {
         [Required]
-        [MinLength(Constants.User.MinUsernameLength), MaxLength(Constants.User.MaxUsernameLength)]
+        [StringLength(Constants.User.MaxUsernameLength, MinimumLength = Constants.User.MinUsernameLength)]
         public string Username { get; set; } = string.Empty;
 
         [Required]
         [DataType(DataType.Password)]
-        [MinLength(Constants.User.MinPasswordLength), MaxLength(Constants.User.MaxPasswordLength)]
+        [StringLength(Constants.User.MaxPasswordLength, MinimumLength = Constants.User.MinPasswordLength)]
         public string Password { get; set; } = string.Empty;
     }
 }

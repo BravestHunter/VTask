@@ -6,7 +6,7 @@ namespace VTask.Model.DTO.User
     {
         public int Id { get; set; }
         public string Username { get; set; } = Constants.User.DefaultUsername;
-        public string? Email { get; set; } = null;
         public string Nickname { get; set; } = Constants.User.DefaultUsername;
+        public string? Email { get; set; } = null;
     }
 }

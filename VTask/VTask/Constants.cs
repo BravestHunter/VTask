@@ -10,8 +10,8 @@
             public const int MaxPasswordLength = 16;
             public const int MinEmailLength = 3;
             public const int MaxEmailLength = 320;
-            public const int MinNicknameLength = 4;
-            public const int MaxNicknameLength = 16;
+            public const int MinNicknameLength = MinUsernameLength;
+            public const int MaxNicknameLength = MaxUsernameLength;
 
             public const string DefaultUsername = "Username";
         }

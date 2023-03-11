@@ -34,8 +34,9 @@ namespace VTask.Migrations
                     Username = table.Column<string>(type: "nvarchar(32)", maxLength: 32, nullable: false),
                     PasswordHash = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
                     PasswordSalt = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
+                    Nickname = table.Column<string>(type: "nvarchar(32)", maxLength: 32, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(320)", maxLength: 320, nullable: true),
-                    Nickname = table.Column<string>(type: "nvarchar(16)", maxLength: 16, nullable: true)
+                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {

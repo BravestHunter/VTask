@@ -58,9 +58,13 @@ namespace VTask.Migrations
                         .HasMaxLength(320)
                         .HasColumnType("nvarchar(320)");
 
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Nickname")
-                        .HasMaxLength(16)
-                        .HasColumnType("nvarchar(16)");
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)");
 
                     b.Property<byte[]>("PasswordHash")
                         .IsRequired()

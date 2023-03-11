@@ -11,22 +11,20 @@
 
     <input asp-for="Id" type="hidden" />
 
-    <h2 class="text-center text-light pb-4">@(User.Identity?.Name ?? string.Empty)</h2>
-
     <div class="row">
         <div class="col-lg-6">
             <div class="bg-light rounded-borders-block m-2">
                 <div class="input-group">
-                    <label asp-for="Email" class="input-label-block p-2 px-4"></label>
-                    <input asp-for="Email" class="form-control rounded-borders-block" />
+                    <label asp-for="Nickname" class="input-label-block p-2 px-4"></label>
+                    <input asp-for="Nickname" class="form-control rounded-borders-block" />
                 </div>
             </div>
         </div>
         <div class="col-lg-6">
             <div class="bg-light rounded-borders-block m-2">
                 <div class="input-group">
-                    <label asp-for="Nickname" class="input-label-block p-2 px-4"></label>
-                    <input asp-for="Nickname" class="form-control rounded-borders-block" />
+                    <label asp-for="Email" class="input-label-block p-2 px-4"></label>
+                    <input asp-for="Email" class="form-control rounded-borders-block" />
                 </div>
             </div>
         </div>

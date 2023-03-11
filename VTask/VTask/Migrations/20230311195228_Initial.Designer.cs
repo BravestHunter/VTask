@@ -11,7 +11,7 @@ using VTask.Data;
 namespace VTask.Migrations
 {
     [DbContext(typeof(DefaultDbContext))]
-    [Migration("20230311175019_Initial")]
+    [Migration("20230311195228_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -61,9 +61,13 @@ namespace VTask.Migrations
                         .HasMaxLength(320)
                         .HasColumnType("nvarchar(320)");
 
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Nickname")
-                        .HasMaxLength(16)
-                        .HasColumnType("nvarchar(16)");
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)");
 
                     b.Property<byte[]>("PasswordHash")
                         .IsRequired()
