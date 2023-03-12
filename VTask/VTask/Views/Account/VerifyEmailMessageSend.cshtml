@@ -1,0 +1,22 @@
+﻿@model UserModel
+@{
+    ViewData["Title"] = "Email verification";
+}
+
+<div>
+    <h1 class="text-center p-5">Email verification</h1>
+</div>
+
+<div class="container-fluid bg-info rounded-borders-block py-3">
+
+    <h2 class="text-center text-light pb-4">An email with confirmation link was send to @Model.Email</h2>
+    <h6 class="text-center text-dark pb-4">If you don't see email check spam folder or try to send it again</h6>
+
+    <div class="row">
+        <div class="d-grid gap-2 col-6 mx-auto pt-4">
+            <a asp-action="VerifyEmailMessageSend" class="btn btn-outline-light">Send again</a>
+            <a asp-action="Info" class="btn btn-outline-light">Back</a>
+        </div>
+    </div>
+
+</div>

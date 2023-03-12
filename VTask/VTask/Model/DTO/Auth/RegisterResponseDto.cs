@@ -1,7 +1,7 @@
 ﻿using Microsoft.Build.Framework;
 using Microsoft.Identity.Client;
 
-namespace VTask.Model.DTO.User
+namespace VTask.Model.DTO.Auth
 {
     public class RegisterResponseDto
     {

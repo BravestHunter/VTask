@@ -3,8 +3,8 @@ using System.Threading.Tasks;
 using VTask.Repositories;
 using VTask.Exceptions;
 using VTask.Model.DAO;
-using VTask.Model.DTO.User;
 using AutoMapper;
+using VTask.Model.DTO.Auth;
 
 namespace VTask.Services
 {
@@ -36,7 +36,7 @@ namespace VTask.Services
                 throw new PasswordNotValidException();
             }
 
-            (string token, DateTime expirationDate) = _jwtTokenService.GenerateToken(user);
+            (string token, DateTime expirationDate) = _jwtTokenService.GenerateAuthToken(user);
 
             LoginResponseDto response = new()
             {

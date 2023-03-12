@@ -50,18 +50,19 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             OnMessageReceived = context =>
             {
                 context.Token = context.Request.Cookies["JWT"];
-                return Task.CompletedTask;
+                return System.Threading.Tasks.Task.CompletedTask;
             },
         };
     });
 
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<ITaskRepository, TaskRepository>();
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddScoped<IPasswordService, PasswordService>();
+builder.Services.AddScoped<IEmailSenderService, EmailSenderService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<ITaskRepository, TaskRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<ITaskService, TaskService>();
+builder.Services.AddScoped<ITaskService, VTask.Services.TaskService>();
 
 var app = builder.Build();
 

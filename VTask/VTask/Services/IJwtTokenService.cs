@@ -6,6 +6,6 @@ namespace VTask.Services
 {
     public interface IJwtTokenService
     {
-        (string token, DateTime expirationDate) GenerateToken(User user);
+        (string token, DateTime expirationDate) GenerateAuthToken(User user);
     }
 }

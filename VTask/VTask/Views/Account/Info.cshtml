@@ -35,6 +35,12 @@
             <a asp-action="Edit" class="btn btn-outline-light">Edit</a>
             <a asp-action="ChangeUsername" class="btn btn-outline-light">Change username</a>
             <a asp-action="ChangePassword" class="btn btn-outline-light">Change password</a>
+
+            @if (!Model.EmailConfirmed)
+            {
+                <a asp-action="VerifyEmailMessageSend" class="btn btn-outline-light">Verify Email</a>
+            }
+
         </div>
     </div>
 

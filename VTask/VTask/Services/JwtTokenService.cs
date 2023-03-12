@@ -20,7 +20,7 @@ namespace VTask.Services
             _configuration = configuration;
         }
 
-        public (string token, DateTime expirationDate) GenerateToken(User user)
+        public (string token, DateTime expirationDate) GenerateAuthToken(User user)
         {
             var claims = new List<Claim>
             {

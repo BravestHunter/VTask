@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using VTask.Model.DAO;
+using VTask.Model.DTO.Auth;
 using VTask.Model.DTO.Task;
 using VTask.Model.DTO.User;
 using VTask.Model.MVC;
@@ -21,9 +22,11 @@ namespace VTask
             CreateMap<User, UserUpdateResponseDto>();
             CreateMap<User, UserChangeUsernameResponseDto>();
             CreateMap<User, UserChangePasswordResponseDto>();
+            CreateMap<User, UserVerifyEmailResponseDto>();
             CreateMap<UserGetResponseDto, UserModel>();
             CreateMap<UserGetResponseDto, UsernameChangeModel>();
             CreateMap<UserGetResponseDto, PasswordChangeModel>();
+            CreateMap<UserGetResponseDto, UserGetEmailVerificationTokenRequestDto>();
             CreateMap<UserModel, UserUpdateRequestDto>();
             CreateMap<UsernameChangeModel, UserChangeUsernameRequestDto>();
             CreateMap<PasswordChangeModel, UserChangePasswordRequestDto>();

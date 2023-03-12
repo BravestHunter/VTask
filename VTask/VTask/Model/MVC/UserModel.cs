@@ -19,5 +19,7 @@ namespace VTask.Model.MVC
         [DataType(DataType.EmailAddress)]
         [StringLength(Constants.User.MaxEmailLength, MinimumLength = Constants.User.MinEmailLength)]
         public string? Email { get; set; } = null;
+
+        public bool EmailConfirmed { get; set; } = false;
     }
 }

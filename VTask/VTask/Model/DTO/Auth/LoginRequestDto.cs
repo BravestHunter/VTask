@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace VTask.Model.DTO.User
+namespace VTask.Model.DTO.Auth
 {
     public class LoginRequestDto
     {

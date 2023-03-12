@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using VTask.Model.DTO.User;
+using VTask.Model.DTO.Auth;
 using VTask.Model.MVC;
 using VTask.Services;
 
