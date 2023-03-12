@@ -56,6 +56,31 @@ namespace VTask.Controllers.MVC
         }
 
         [HttpGet]
+        public async Task<IActionResult> ChangeUsername()
+        {
+            var response = await GetAuthenticatedUser();
+            var model = _mapper.Map<UsernameChangeModel>(response);
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangeUsername(UsernameChangeModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var request = _mapper.Map<UserChangeUsernameRequestDto>(model);
+            var response = await _userService.ChangeUsername(request);
+
+            TempData[Constants.Notification.SuccessMessageTempBagKey] = "Username was changed successfully";
+
+            return RedirectToAction("Logout", "Auth");
+        }
+
+        [HttpGet]
         public async Task<IActionResult> ChangePassword()
         {
             var response = await GetAuthenticatedUser();

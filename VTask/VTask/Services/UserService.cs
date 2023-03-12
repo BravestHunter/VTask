@@ -44,6 +44,26 @@ namespace VTask.Services
             return response;
         }
 
+        public async Task<UserChangeUsernameResponseDto> ChangeUsername(UserChangeUsernameRequestDto request)
+        {
+            var existingUser = await _userRepository.Get(request.UserName);
+            if (existingUser != null)
+            {
+                throw new DbEntryAlreadyExists($"User with username '{request.UserName}' already exists");
+            }
+
+            var user = await GetUser(request.Id);
+
+            user.Username = request.UserName;
+
+            _userRepository.Update(user);
+            await _userRepository.SaveChanges();
+
+            var response = _mapper.Map<UserChangeUsernameResponseDto>(user);
+
+            return response;
+        }
+
         public async Task<UserChangePasswordResponseDto> ChangePassword(UserChangePasswordRequestDto request)
         {
             var user = await GetUser(request.Id);
