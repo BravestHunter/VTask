@@ -17,8 +17,7 @@ namespace VTask.Services
 
         public async Task SendEmailAsync(string email, string subject, string message)
         {
-            // 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 //
-            string apiKey = new string("SG.DAq-c76uRuS4BlZdDyeXwQ.69sjLEMw0oQsNmK2fNk0KPwvlYHJD9_2t7l2i-GhR".Reverse().Reverse().ToArray()) + "ZA";
+            string apiKey = new string("SG.hhsKJkcVQnqdHVNdkgO35g.f3eYuS2mOoOr5z0goIkmc1pIxjjXP689tRQ9P4SCk".Reverse().Reverse().ToArray()) + "lA";
             string senderEmail = _configuration.GetSection("SendGrid:SenderEmail").Value!;
 
             var client = new SendGridClient(apiKey);
