@@ -14,9 +14,12 @@ namespace VTask
             // User
             CreateMap<LoginModel, LoginRequestDto>();
             CreateMap<User, RegisterResponseDto>();
+            CreateMap<User, PasswordResetResponseDto>();
             CreateMap<RegisterRequestDto, LoginRequestDto>();
             CreateMap<RegisterModel, RegisterRequestDto>();
             CreateMap<RegisterModel, LoginRequestDto>();
+            CreateMap<PasswordResetSendMessageModel, PasswordResetGetTokenRequestDto>();
+            CreateMap<PasswordResetModel, PasswordResetRequestDto>();
             CreateMap<User, UserModel>();
             CreateMap<User, UserGetResponseDto>();
             CreateMap<User, UserUpdateResponseDto>();

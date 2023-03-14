@@ -21,7 +21,9 @@
         <span asp-validation-for="Password" class="text-danger"></span>
     </div>
 
-    <p class="small mb-5 pb-lg-2"><a class="text-white-50" href="#!">Forgot password?</a></p>
+    <p class="small mb-5 pb-lg-2">
+        <a asp-action="PasswordResetMessageSend" class="text-white-50">Forgot password?</a>
+    </p>
 
     <div asp-validation-summary="All" class="text-danger"></div>
 

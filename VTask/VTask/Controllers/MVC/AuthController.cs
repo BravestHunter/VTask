@@ -12,11 +12,13 @@ namespace VTask.Controllers.MVC
     {
         private readonly IAuthService _authService;
         private readonly IMapper _mapper;
+        private readonly IEmailSenderService _emailSenderService;
 
-        public AuthController(IAuthService authService, IMapper mapper)
+        public AuthController(IAuthService authService, IMapper mapper, IEmailSenderService emailSenderService)
         {
             _authService = authService;
             _mapper = mapper;
+            _emailSenderService = emailSenderService;
         }
 
         [HttpGet]
@@ -68,6 +70,63 @@ namespace VTask.Controllers.MVC
             await Login(loginRequest);
 
             return RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet]
+        public IActionResult PasswordResetMessageSend()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> PasswordResetMessageSend(PasswordResetSendMessageModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var request = _mapper.Map<PasswordResetGetTokenRequestDto>(model);
+            var response = await _authService.GetPasswordResetToken(request);
+
+            var passwordResetLink = Url.Action("PasswordReset", "Auth", new { response.Token }, Request.Scheme);
+
+            await _emailSenderService.SendEmailAsync(response.Email, "VTask: Password reset link", passwordResetLink!);
+
+            return RedirectToAction("PasswordResetMessageWasSend");
+        }
+
+        [HttpGet]
+        public IActionResult PasswordResetMessageWasSend()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult PasswordReset(string token)
+        {
+            PasswordResetModel model = new()
+            {
+                Token = token
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> PasswordReset(PasswordResetModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var request = _mapper.Map<PasswordResetRequestDto>(model);
+            var response = await _authService.ResetPassword(request);
+
+            // Notify about operation success?
+
+            return RedirectToAction("Login");
         }
 
         private async Task Login(LoginRequestDto request)

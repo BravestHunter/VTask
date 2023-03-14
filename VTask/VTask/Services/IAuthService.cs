@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using VTask.Model.DAO;
 using VTask.Model.DTO.Auth;
+using VTask.Model.MVC;
 
 namespace VTask.Services
 {
@@ -8,5 +9,7 @@ namespace VTask.Services
     {
         Task<LoginResponseDto> Login(LoginRequestDto request);
         Task<RegisterResponseDto> Register(RegisterRequestDto request);
+        Task<PasswordResetGetTokenResponseDto> GetPasswordResetToken(PasswordResetGetTokenRequestDto request);
+        Task<PasswordResetResponseDto> ResetPassword(PasswordResetRequestDto request);
     }
 }
