@@ -61,7 +61,7 @@ namespace VTask.Services
             var existingUser = await _userRepository.Get(request.UserName);
             if (existingUser != null)
             {
-                throw new DbEntryAlreadyExists($"User with username '{request.UserName}' already exists");
+                throw new DbEntryAlreadyExistsException($"User with username '{request.UserName}' already exists");
             }
 
             var user = await GetUser(request.Id);

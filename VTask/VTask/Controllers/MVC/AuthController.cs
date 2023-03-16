@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
+using VTask.Exceptions;
 using VTask.Model.DTO.Auth;
 using VTask.Model.MVC;
 using VTask.Services;
@@ -63,11 +65,19 @@ namespace VTask.Controllers.MVC
                 return View(model);
             }
 
-            var registerRequest = _mapper.Map<RegisterRequestDto>(model);
-            var registerResponse = await _authService.Register(registerRequest);
+            try
+            {
+                var registerRequest = _mapper.Map<RegisterRequestDto>(model);
+                var registerResponse = await _authService.Register(registerRequest);
 
-            var loginRequest = _mapper.Map<LoginRequestDto>(registerRequest);
-            await Login(loginRequest);
+                var loginRequest = _mapper.Map<LoginRequestDto>(registerRequest);
+                await Login(loginRequest);
+            }
+            catch (DbEntryAlreadyExistsException)
+            {
+                ModelState.AddModelError(nameof(model.Username), "User with such login already exists");
+                return View(model);
+            }
 
             return RedirectToAction("Index", "Home");
         }

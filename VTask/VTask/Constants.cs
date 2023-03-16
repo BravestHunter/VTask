@@ -1,4 +1,6 @@
-﻿namespace VTask
+﻿using Microsoft.SqlServer.Server;
+
+namespace VTask
 {
     public static class Constants
     {
@@ -24,6 +26,11 @@
             public const int MaxDescriptionLength = 1024;
 
             public const string DefaultTitle = "Title";
+        }
+
+        public static class Format
+        {
+            public const string StringPropertyInvalidLengthMessageFormat = "Length should be between {2} and {1}";
         }
 
         public static class Notification

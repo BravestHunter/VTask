@@ -55,7 +55,7 @@ namespace VTask.Services
             var existingUser = await _userRepository.Get(request.Username);
             if (existingUser != null)
             {
-                throw new DbEntryAlreadyExists($"User with username {request.Username} already exists");
+                throw new DbEntryAlreadyExistsException($"User with username {request.Username} already exists");
             }
 
             (byte[] passwordHash, byte[] passwordSalt) = _passwordService.CreatePasswordHashSalt(request.Password);

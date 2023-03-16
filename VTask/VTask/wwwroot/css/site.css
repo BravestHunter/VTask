@@ -18,8 +18,8 @@ html {
 }
 
 body {
-    margin-bottom: 60px;
-    min-width:260px;
+    #margin-bottom: 60px;
+    min-width:350px;
 }
 
 .auth-background {
@@ -45,3 +45,8 @@ body {
     color: #5a5a5a;
 }
 
+.validation-error-message {
+    color: rgba(140, 0, 20) !important;
+    display: block;
+    height: 0.5rem;
+}
