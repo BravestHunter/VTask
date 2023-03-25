@@ -27,5 +27,12 @@ namespace VTask.Controllers.MVC
         {
             return View();
         }
+
+        [HttpGet]
+        [Route("/Error")]
+        public IActionResult Error()
+        {
+            return View();
+        }
     }
 }
