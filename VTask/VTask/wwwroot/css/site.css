@@ -22,6 +22,12 @@ body {
     min-width:350px;
 }
 
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
 .auth-background {
     background-color: white;
     background-image: url('../images/auth_background.jpg');
@@ -47,6 +53,6 @@ body {
 
 .validation-error-message {
     color: rgba(140, 0, 20) !important;
-    display: block;
-    height: 0.5rem;
+    display: inline-block;
+    min-height: 0.8rem;
 }

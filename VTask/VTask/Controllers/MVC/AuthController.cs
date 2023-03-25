@@ -37,8 +37,24 @@ namespace VTask.Controllers.MVC
                 return View(model);
             }
 
-            var loginRequest = _mapper.Map<LoginRequestDto>(model);
-            await Login(loginRequest);
+            try
+            {
+                var loginRequest = _mapper.Map<LoginRequestDto>(model);
+                await Login(loginRequest);
+            }
+            catch (DbEntryNotFoundException)
+            {
+                ModelState.AddModelError("All", "Wrong username or password");
+            }
+            catch (PasswordNotValidException)
+            {
+                ModelState.AddModelError("All", "Wrong username or password");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
 
             return RedirectToAction("Index", "Home");
         }
@@ -76,8 +92,13 @@ namespace VTask.Controllers.MVC
             catch (DbEntryAlreadyExistsException)
             {
                 ModelState.AddModelError(nameof(model.Username), "User with such login already exists");
+            }
+
+            if (!ModelState.IsValid)
+            {
                 return View(model);
             }
+
 
             return RedirectToAction("Index", "Home");
         }
@@ -96,12 +117,19 @@ namespace VTask.Controllers.MVC
                 return View(model);
             }
 
-            var request = _mapper.Map<PasswordResetGetTokenRequestDto>(model);
-            var response = await _authService.GetPasswordResetToken(request);
+            try
+            {
+                var request = _mapper.Map<PasswordResetGetTokenRequestDto>(model);
+                var response = await _authService.GetPasswordResetToken(request);
 
-            var passwordResetLink = Url.Action("PasswordReset", "Auth", new { response.Token }, Request.Scheme);
+                var passwordResetLink = Url.Action("PasswordReset", "Auth", new { response.Token }, Request.Scheme);
 
-            await _emailSenderService.SendEmailAsync(response.Email, "VTask: Password reset link", passwordResetLink!);
+                await _emailSenderService.SendEmailAsync(response.Email, "VTask: Password reset link", passwordResetLink!);
+            }
+            catch
+            {
+                // Do nothing
+            }
 
             return RedirectToAction("PasswordResetMessageWasSend");
         }
@@ -131,8 +159,20 @@ namespace VTask.Controllers.MVC
                 return View(model);
             }
 
-            var request = _mapper.Map<PasswordResetRequestDto>(model);
-            var response = await _authService.ResetPassword(request);
+            try
+            {
+                var request = _mapper.Map<PasswordResetRequestDto>(model);
+                var response = await _authService.ResetPassword(request);
+            }
+            catch (TokenExpiredException)
+            {
+                ModelState.AddModelError("All", "Token expired");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
 
             // Notify about operation success?
 

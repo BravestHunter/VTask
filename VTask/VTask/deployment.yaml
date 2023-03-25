@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vtask-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vtask-app
+  template:
+    metadata:
+      labels:
+        app: vtask-app
+    spec:
+      containers:
+        - name: vtask-app
+          image: <BravestHunter>/vtask-app
