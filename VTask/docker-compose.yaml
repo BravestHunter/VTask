@@ -1,3 +1,4 @@
+version: "3.8"
 services:
   vtask-db:
     image: mcr.microsoft.com/mssql/server:2022-latest
@@ -5,3 +6,12 @@ services:
       - ./env/mssql.env
     ports:
       - 1433:1433
+  vtask-mvc:
+    build: ./VTask
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - 80:80
+      - 443:443
+    depends_on:
+      - vtask-db
