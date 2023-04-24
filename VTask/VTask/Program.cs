@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
+using System.Linq;
 using VTask.Data;
 using VTask.Repositories;
 using VTask.Services;
@@ -90,5 +91,17 @@ app.UseAuthorization();
 app.MapControllerRoute("MVC", "mvc/{controller=Home}/{action=Index}/{id?}");
 app.MapControllerRoute("MVC_Area", "mvc/{area?}/{controller=Home}/{action=Index}/{id?}");
 app.MapControllers();
+
+// Apply pending migrations
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+
+    var context = services.GetRequiredService<DefaultDbContext>();
+    if (context.Database.GetPendingMigrations().Any())
+    {
+        context.Database.Migrate();
+    }
+}
 
 app.Run();
